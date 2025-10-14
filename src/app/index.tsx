@@ -9,7 +9,7 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
-            <Text>provide did in slug pls thank u</Text>
+            <Text>Log in with your pds.</Text>
         </View>
     );
 }
