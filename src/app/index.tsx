@@ -9,7 +9,7 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
-           <Text>provide did in slug pls thank u</Text> 
+            <Text>provide did in slug pls thank u</Text>
         </View>
     );
 }

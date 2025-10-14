@@ -1,4 +1,5 @@
 import { Loading } from "@/components/Loading";
+import { Message } from "@/components/Message";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import type { DidPlc } from "@/lib/types/atproto";
 import { getBskyProfile } from "@/queries/get-profile";
@@ -22,7 +23,7 @@ export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
 
     const handleSend = () => {
         if (inputText.trim()) {
-            sendMessage({text: inputText, did});
+            sendMessage({ text: inputText, did });
             setInputText("");
         }
     };
@@ -33,7 +34,7 @@ export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
         isError,
         error,
     } = useQuery({
-        queryKey: ["profile"],
+        queryKey: [did],
         queryFn: async () => {
             return await getBskyProfile(did);
         },
@@ -73,12 +74,7 @@ export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
 
             <ScrollView style={styles.messagesContainer}>
                 {messages.map((msg, index) => (
-                    <View key={index} style={styles.messageItem}>
-                        <Text style={styles.messageText}>{msg.text}</Text>
-                        <Text style={styles.timestamp}>
-                            {new Date(msg.timestamp).toLocaleTimeString()}
-                        </Text>
-                    </View>
+                    <Message message={msg} key={index} />
                 ))}
             </ScrollView>
 
