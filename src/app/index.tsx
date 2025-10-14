@@ -1,4 +1,4 @@
-import ChatComponent from "@/app/components/ChatComponent";
+import ChatComponent from "@/components/ChatComponent";
 import { View } from "react-native";
 
 export default function Index() {

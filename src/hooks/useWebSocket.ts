@@ -1,10 +1,10 @@
-import type { ShardMessage } from "@/app/lib/types/messages";
+import type { ShardMessage } from "@/lib/types/messages";
 import {
     validateHistoryMessage,
     validateNewMessage,
     validateWsMessageString,
     validateWsMessageType,
-} from "@/app/lib/validators";
+} from "@/lib/validators";
 import { useEffect, useRef, useState } from "react";
 
 export function useWebSocket(url: string) {

@@ -1,4 +1,8 @@
-import { useWebSocket } from "@/app/hooks/useWebSocket";
+import { Loading } from "@/components/Loading";
+import { useWebSocket } from "@/hooks/useWebSocket";
+import type { DidPlc } from "@/lib/types/atproto";
+import { getBskyProfile } from "@/queries/get-profile";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
     View,
@@ -9,7 +13,7 @@ import {
     ScrollView,
 } from "react-native";
 
-export default function ChatComponentProfiled() {
+export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
     const [inputText, setInputText] = useState("");
     const { messages, isConnected, sendMessage } = useWebSocket(
         "ws://localhost:8080",
@@ -22,8 +26,23 @@ export default function ChatComponentProfiled() {
         }
     };
 
-    return (
+    const { data, isPending, isError, error } = useQuery({
+        queryKey: ["profile"],
+        queryFn: async () => {
+            return await getBskyProfile(did);
+        },
+    });
+
+    return isPending ? (
+        <Loading />
+    ) : isError ? (
+        <View>
+            <Text>Something went wrong :(</Text>
+            <Text>{error.message}</Text>
+        </View>
+    ) : (
         <View style={styles.container}>
+            {data && <Text>Hi, {data.displayName ?? data.handle}!</Text>}
             <View style={styles.header}>
                 <Text style={styles.status}>
                     {isConnected ? "🟢 Connected" : "🔴 Disconnected"}

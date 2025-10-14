@@ -1,8 +1,4 @@
-import {
-    historyMessageSchema,
-    shardMessageSchema,
-    websocketMessageSchema,
-} from "@/app/lib/types/messages";
+import { historyMessageSchema, shardMessageSchema, websocketMessageSchema } from "@/lib/types/messages";
 import { z } from "zod";
 
 export const validateWsMessageString = (data: unknown) => {

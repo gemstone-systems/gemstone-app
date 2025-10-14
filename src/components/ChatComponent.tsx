@@ -1,4 +1,4 @@
-import { useWebSocket } from "@/app/hooks/useWebSocket";
+import { useWebSocket } from "@/hooks/useWebSocket";
 import { useState } from "react";
 import {
     View,
