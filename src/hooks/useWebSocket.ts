@@ -1,3 +1,4 @@
+import type { DidPlc } from "@/lib/types/atproto";
 import type { ShardMessage } from "@/lib/types/messages";
 import {
     validateHistoryMessage,
@@ -55,12 +56,13 @@ export function useWebSocket(url: string) {
         };
     }, [url]);
 
-    const sendMessage = (text: string) => {
+    const sendMessage = ({ text, did }: SendMessageOpts) => {
         if (ws.current?.readyState === WebSocket.OPEN) {
             ws.current.send(
                 JSON.stringify({
                     type: "shard/message",
                     text,
+                    did,
                     timestamp: new Date(),
                 }),
             );
@@ -68,4 +70,9 @@ export function useWebSocket(url: string) {
     };
 
     return { messages, isConnected, sendMessage };
+}
+
+export interface SendMessageOpts {
+    text: string;
+    did: DidPlc;
 }

@@ -1,5 +1,4 @@
-import ChatComponent from "@/components/ChatComponent";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function Index() {
     return (
@@ -10,7 +9,7 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
-            <ChatComponent />
+           <Text>provide did in slug pls thank u</Text> 
         </View>
     );
 }

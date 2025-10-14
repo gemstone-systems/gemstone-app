@@ -22,7 +22,7 @@ export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
 
     const handleSend = () => {
         if (inputText.trim()) {
-            sendMessage(inputText);
+            sendMessage({text: inputText, did});
             setInputText("");
         }
     };
