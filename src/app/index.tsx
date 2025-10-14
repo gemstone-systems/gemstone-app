@@ -1,4 +1,5 @@
-import { Text, View } from "react-native";
+import { Login } from "@/components/Auth/Login";
+import { View } from "react-native";
 
 export default function Index() {
     return (
@@ -9,7 +10,7 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
-            <Text>Log in with your pds.</Text>
+            <Login />
         </View>
     );
 }
