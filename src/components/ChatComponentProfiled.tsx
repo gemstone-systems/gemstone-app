@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     ScrollView,
+    Image,
 } from "react-native";
 
 export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
@@ -26,12 +27,19 @@ export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
         }
     };
 
-    const { data, isPending, isError, error } = useQuery({
+    const {
+        data: profile,
+        isPending,
+        isError,
+        error,
+    } = useQuery({
         queryKey: ["profile"],
         queryFn: async () => {
             return await getBskyProfile(did);
         },
     });
+
+    if (!isPending) console.log(profile?.avatar);
 
     return isPending ? (
         <Loading />
@@ -42,7 +50,21 @@ export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
         </View>
     ) : (
         <View style={styles.container}>
-            {data && <Text>Hi, {data.displayName ?? data.handle}!</Text>}
+            {profile && (
+                <View>
+                    <View style={styles.profile}>
+                        <Text>
+                            Hi, {profile.displayName ?? profile.handle}!
+                        </Text>
+                        {profile.avatar && (
+                            <Image
+                                style={styles.avatar}
+                                source={{ uri: profile.avatar }}
+                            />
+                        )}
+                    </View>
+                </View>
+            )}
             <View style={styles.header}>
                 <Text style={styles.status}>
                     {isConnected ? "🟢 Connected" : "🔴 Disconnected"}
@@ -84,6 +106,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
+    },
+    profile: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: "#e0e0e0",
+        alignItems: "center",
+    },
+    avatar: {
+        width: 32,
+        height: 32,
+        borderRadius: 2000000000,
     },
     header: {
         padding: 16,
