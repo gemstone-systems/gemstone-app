@@ -2,7 +2,7 @@ import type { DidPlc } from "@/lib/types/atproto";
 import { getBskyProfile } from "@/queries/get-profile";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { Image, View, Text } from "react-native";
+import { Image, View, Text, StyleSheet } from "react-native";
 
 export const Avatar = React.memo(({ did }: { did: DidPlc }) => {
     const {
@@ -21,8 +21,21 @@ export const Avatar = React.memo(({ did }: { did: DidPlc }) => {
     ) : isError ? (
         <Text>:(</Text>
     ) : (
-        profile && <Image source={{ uri: profile.avatar ?? profile.handle }} />
+        profile && (
+            <Image
+                style={styles.avatar}
+                source={{ uri: profile.avatar ?? profile.handle }}
+            />
+        )
     );
 });
 
 Avatar.displayName = "Avatar";
+
+const styles = StyleSheet.create({
+    avatar: {
+        width: 32,
+        height: 32,
+        borderRadius: 2000000000,
+    },
+});
