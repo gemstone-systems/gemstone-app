@@ -1,5 +1,5 @@
 import ChatComponent from "@/app/components/ChatComponent";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export default function Index() {
     return (
@@ -10,7 +10,6 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
-            <Text>Edit app/index.tsx to edit this screen.</Text>
             <ChatComponent />
         </View>
     );

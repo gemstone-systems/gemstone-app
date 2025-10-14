@@ -1,9 +1,14 @@
+import type { ShardMessage } from "@/app/lib/types/messages";
+import {
+    validateHistoryMessage,
+    validateNewMessage,
+    validateWsMessageString,
+    validateWsMessageType,
+} from "@/app/lib/validators";
 import { useEffect, useRef, useState } from "react";
 
 export function useWebSocket(url: string) {
-    const [messages, setMessages] = useState<
-        { text: string; timestamp: string }[]
-    >([]);
+    const [messages, setMessages] = useState<ShardMessage[]>([]);
     const [isConnected, setIsConnected] = useState(false);
     const ws = useRef<WebSocket | null>(null);
 
@@ -17,15 +22,21 @@ export function useWebSocket(url: string) {
         };
 
         ws.current.onmessage = (event) => {
-            const data = JSON.parse(event.data);
+            const eventData = validateWsMessageString(event.data);
+            if (!eventData) return;
 
-            if (data.type === "shard/history") {
-                setMessages(data.messages);
-            } else if (data.type === "shard/message") {
-                setMessages((prev) => [
-                    ...prev,
-                    { text: data.text, timestamp: data.timestamp },
-                ]);
+            const data: unknown = JSON.parse(eventData);
+            const wsMessage = validateWsMessageType(data);
+            if (!wsMessage) return;
+
+            if (wsMessage.type === "shard/history") {
+                const history = validateHistoryMessage(wsMessage);
+                if (!history) return;
+                if (history.messages) setMessages(history.messages);
+            } else {
+                const message = validateNewMessage(wsMessage);
+                if (!message) return;
+                setMessages((prev) => [...prev, message]);
             }
         };
 
