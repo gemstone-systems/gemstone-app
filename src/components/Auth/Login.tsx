@@ -1,9 +1,9 @@
-import { oauthClient } from "@/lib/utils/atproto/oauth";
+import { oAuthClient } from "@/lib/utils/atproto/oauth";
 import { useOAuth } from "@/providers/OAuthProvider";
 import { Agent } from "@atproto/api";
 import type { OAuthSession } from "@atproto/oauth-client";
 import { useState } from "react";
-import { Alert, Button, StyleSheet, TextInput, View } from "react-native";
+import { Button, StyleSheet, TextInput, View } from "react-native";
 
 export const Login = () => {
     const [atprotoHandle, setAtprotoHandle] = useState("");
@@ -22,21 +22,12 @@ export const Login = () => {
         const jsonData = (await result.json()) as {
             Answer: { name: string; data: string }[];
         };
-        const did = jsonData.Answer[0].data;
-        const res = await oauthClient.signIn(did);
-        if (res.status === "success") {
-            setSession(res.session);
-            const newAgent = new Agent(res.session);
-            setAgent(newAgent);
-        } else if (res.status === "error") {
-            const { error } = res;
-            Alert.alert("Error", JSON.stringify(error));
-        } else {
-            Alert.alert(
-                "Error",
-                `Received unknown WebResultType: ${res.status}`,
-            );
-        }
+        let did = jsonData.Answer[0].data;
+        if (did.startsWith("did=")) did = did.slice(4, did.length);
+        const session = await oAuthClient.signIn(did);
+        setSession(session);
+        const newAgent = new Agent(session);
+        setAgent(newAgent);
     };
 
     const handleSubmit = () => {

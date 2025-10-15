@@ -1,6 +1,11 @@
-import { ExpoOAuthClient } from "@atproto/oauth-client-expo";
+import type {
+    AuthorizeOptions,
+    OAuthSession,
+} from "@atproto/oauth-client-browser";
+import type { ExpoOAuthClientOptions } from "@atproto/oauth-client-expo";
+import { ExpoOAuthClient as PbcExpoOAuthClient } from "@atproto/oauth-client-expo";
 
-const oauthMetadata = {
+const oAuthMetadata = {
     client_id: "https://app.gmstn.systems/oauth-client-metadata.json",
     client_name: "Gemstone",
     client_uri: "https://app.gmstn.systems",
@@ -12,7 +17,22 @@ const oauthMetadata = {
     application_type: "native",
     dpop_bound_access_tokens: true,
 };
-export const oauthClient = new ExpoOAuthClient({
-    clientMetadata: oauthMetadata,
+
+// suuuuuch a hack holy shit
+export type TypedExpoOAuthClient = new (
+    options: ExpoOAuthClientOptions,
+) => TypedExpoOAuthClientInstance;
+
+export interface TypedExpoOAuthClientInstance {
+    signIn(signIn: string, options?: AuthorizeOptions): Promise<OAuthSession>;
+    handleCallback(): Promise<null | OAuthSession>;
+}
+
+// i cast type magic
+const ExpoOAuthClient = PbcExpoOAuthClient as unknown as TypedExpoOAuthClient;
+
+export const oAuthClient = new ExpoOAuthClient({
+    //@ts-expect-error funky wunky with typey wypies
+    clientMetadata: undefined,
     handleResolver: "https://bsky.social",
 });
