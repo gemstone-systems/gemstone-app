@@ -7,6 +7,7 @@ import type {
 import type { ExpoOAuthClientOptions } from "@atproto/oauth-client-expo";
 import { ExpoOAuthClient as PbcWebExpoOAuthClient } from "@atproto/oauth-client-expo";
 import oAuthMetadata from "../../../../assets/oauth-client-metadata.json";
+import { __DEV__loopbackOAuthMetadata } from "@/lib/consts";
 
 // suuuuuch a hack holy shit
 export type TypedExpoOAuthClient = new (
@@ -24,6 +25,6 @@ export const ExpoOAuthClient =
 
 export const oAuthClient = new ExpoOAuthClient({
     // @ts-expect-error funky wunky with typey wypies
-    clientMetadata: isDevMode ? undefined : oAuthMetadata,
+    clientMetadata: isDevMode ? __DEV__loopbackOAuthMetadata : oAuthMetadata,
     handleResolver: "https://bsky.social",
 });
