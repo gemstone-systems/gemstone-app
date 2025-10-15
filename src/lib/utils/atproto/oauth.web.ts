@@ -5,7 +5,7 @@ import type {
     OAuthSession,
 } from "@atproto/oauth-client-browser";
 import type { ExpoOAuthClientOptions } from "@atproto/oauth-client-expo";
-import { ExpoOAuthClient as PbcExpoOAuthClient } from "@atproto/oauth-client-expo";
+import { ExpoOAuthClient as PbcWebExpoOAuthClient } from "@atproto/oauth-client-expo";
 import oAuthMetadata from "../../../../assets/oauth-client-metadata.json";
 
 // suuuuuch a hack holy shit
@@ -19,7 +19,7 @@ export interface TypedExpoOAuthClientInstance extends BrowserOAuthClient {
 }
 
 // i cast type magic
-const ExpoOAuthClient = PbcExpoOAuthClient as unknown as TypedExpoOAuthClient;
+const ExpoOAuthClient = PbcWebExpoOAuthClient as unknown as TypedExpoOAuthClient;
 
 export const oAuthClient = new ExpoOAuthClient({
     // @ts-expect-error funky wunky with typey wypies
@@ -27,15 +27,25 @@ export const oAuthClient = new ExpoOAuthClient({
     handleResolver: "https://bsky.social",
 });
 
-const result = await oAuthClient.init();
-
-if (result && isDevMode) {
-    const { session, state } = result;
-    if (state != null) {
-        console.log(
-            `${session.sub} was successfully authenticated (state: ${state})`,
+oAuthClient
+    .init()
+    .then((result) => {
+        if (result && isDevMode) {
+            const { session, state } = result;
+            if (state != null) {
+                console.log(
+                    `${session.sub} was successfully authenticated (state: ${state})`,
+                );
+            } else {
+                console.log(
+                    `${session.sub} was restored (last active session)`,
+                );
+            }
+        }
+    })
+    .catch((err: unknown) => {
+        console.error(
+            "something went wrong when trying to init the oauth client.",
         );
-    } else {
-        console.log(`${session.sub} was restored (last active session)`);
-    }
-}
+        console.error(err);
+    });
