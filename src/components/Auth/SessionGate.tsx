@@ -8,7 +8,13 @@ export const SessionGate = ({ children }: { children: ReactNode }) => {
     const { isLoading, session } = useOAuthValue();
     if (isLoading) {
         return (
-            <View>
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
                 <Loading />
             </View>
         );

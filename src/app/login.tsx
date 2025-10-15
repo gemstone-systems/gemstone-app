@@ -1,4 +1,5 @@
 import { Login } from "@/components/Auth/Login";
+import Loading from "@/components/Loading";
 import { useOAuthValue } from "@/providers/OAuthProvider";
 import { Redirect } from "expo-router";
 import { View } from "react-native";
@@ -6,7 +7,21 @@ import { View } from "react-native";
 const LoginPage = () => {
     const { isLoading, session } = useOAuthValue();
 
-    if (!isLoading && session) {
+    if (isLoading) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <Loading />
+            </View>
+        );
+    }
+
+    if (session) {
         return <Redirect href="/" />;
     }
 
