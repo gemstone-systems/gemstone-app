@@ -16,6 +16,7 @@ export const Login = () => {
             setOAuth({
                 session,
                 agent,
+                isLoading: false,
             });
     };
 
