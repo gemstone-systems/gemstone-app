@@ -6,7 +6,13 @@ import { isDevMode } from "@/lib/utils/env";
 import { Agent } from "@atproto/api";
 import type { OAuthSession } from "@atproto/oauth-client";
 import type { ReactNode, Dispatch } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 
 interface OAuth {
     session?: OAuthSession;
@@ -26,33 +32,34 @@ export const OAuthProvider = ({ children }: { children: ReactNode }) => {
         agent: undefined,
         client: providedOAuthClient,
     });
-    useEffect(() => {
-        async function initOAuth() {
-            try {
-                const result = await providedOAuthClient.init();
-                if (result && isDevMode) {
-                    const { session, state } = result;
-                    console.log("session state:", state);
-                    if (state != null) {
-                        console.log(
-                            `${session.sub} was successfully authenticated (state: ${state})`,
-                        );
-                    } else {
-                        console.log(
-                            `${session.sub} was restored (last active session), token_endpoint: ${session.serverMetadata.token_endpoint}`,
-                        );
-                    }
-                    const agent = new Agent(session);
-                    setOAuth({ ...oAuth, session, agent });
+    const initOAuth = useCallback(async () => {
+        try {
+            const result = await providedOAuthClient.init();
+            if (result && isDevMode) {
+                const { session, state } = result;
+                console.log("session state:", state);
+                if (state != null) {
+                    console.log(
+                        `${session.sub} was successfully authenticated (state: ${state})`,
+                    );
+                } else {
+                    console.log(
+                        `${session.sub} was restored (last active session), token_endpoint: ${session.serverMetadata.token_endpoint}`,
+                    );
                 }
-                return result;
-            } catch (err: unknown) {
-                console.error(
-                    "something went wrong when trying to init the oauth client.",
-                );
-                console.error(err);
+                const agent = new Agent(session);
+                setOAuth({ session, agent, client: providedOAuthClient });
             }
+            return result;
+        } catch (err: unknown) {
+            console.error(
+                "something went wrong when trying to init the oauth client.",
+            );
+            console.error(err);
         }
+    }, [providedOAuthClient]);
+
+    useEffect(() => {
         initOAuth().catch((err: unknown) => {
             console.error(
                 "something went wrong when trying to init the oauth client.",
@@ -63,7 +70,7 @@ export const OAuthProvider = ({ children }: { children: ReactNode }) => {
         if (isDevMode) {
             console.log("finished initialising oauth client");
         }
-    });
+    }, [initOAuth]);
 
     return <OAuthContext value={[oAuth, setOAuth]}>{children}</OAuthContext>;
 };
