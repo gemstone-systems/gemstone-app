@@ -1,7 +1,9 @@
 import { Login } from "@/components/Auth/Login";
-import { View } from "react-native";
+import { useOAuthValue } from "@/providers/OAuthProvider";
+import { Text, View } from "react-native";
 
 export default function Index() {
+    const oAuth = useOAuthValue();
     return (
         <View
             style={{
@@ -10,6 +12,9 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
+            <Text>
+                {oAuth.session ? oAuth.session.serverMetadata.issuer : "no oauth session :("}
+            </Text>
             <Login />
         </View>
     );

@@ -1,5 +1,6 @@
 import type {
     AuthorizeOptions,
+    BrowserOAuthClient,
     OAuthSession,
 } from "@atproto/oauth-client-browser";
 import type { ExpoOAuthClientOptions } from "@atproto/oauth-client-expo";
@@ -23,7 +24,7 @@ export type TypedExpoOAuthClient = new (
     options: ExpoOAuthClientOptions,
 ) => TypedExpoOAuthClientInstance;
 
-export interface TypedExpoOAuthClientInstance {
+export interface TypedExpoOAuthClientInstance extends BrowserOAuthClient {
     signIn(signIn: string, options?: AuthorizeOptions): Promise<OAuthSession>;
     handleCallback(): Promise<null | OAuthSession>;
 }
@@ -36,3 +37,6 @@ export const oAuthClient = new ExpoOAuthClient({
     clientMetadata: undefined,
     handleResolver: "https://bsky.social",
 });
+
+const result = oAuthClient.init();
+console.log(result);

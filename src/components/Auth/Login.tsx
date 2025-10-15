@@ -1,5 +1,5 @@
 import { oAuthClient } from "@/lib/utils/atproto/oauth";
-import { useOAuth } from "@/providers/OAuthProvider";
+import { useSetOAuthValue } from "@/providers/OAuthProvider";
 import { Agent } from "@atproto/api";
 import type { OAuthSession } from "@atproto/oauth-client";
 import { useState } from "react";
@@ -7,27 +7,17 @@ import { Button, StyleSheet, TextInput, View } from "react-native";
 
 export const Login = () => {
     const [atprotoHandle, setAtprotoHandle] = useState("");
-    const [oAuth, setOAuth] = useOAuth();
-    const setSession = (session: OAuthSession) => {
-        if (setOAuth) setOAuth({ ...oAuth, session });
-    };
-    const setAgent = (agent: Agent) => {
-        if (setOAuth) setOAuth({ ...oAuth, agent });
-    };
+    const setOAuth = useSetOAuthValue();
+
     const handlePress = async () => {
-        const req = new Request(
-            `https://dns.google/resolve?name=_atproto.${atprotoHandle}&type=TXT`,
-        );
-        const result = await fetch(req);
-        const jsonData = (await result.json()) as {
-            Answer: { name: string; data: string }[];
-        };
-        let did = jsonData.Answer[0].data;
-        if (did.startsWith("did=")) did = did.slice(4, did.length);
-        const session = await oAuthClient.signIn(did);
-        setSession(session);
-        const newAgent = new Agent(session);
-        setAgent(newAgent);
+        const session = await oAuthClient.signIn(atprotoHandle);
+
+        const agent = new Agent(session);
+        if (setOAuth)
+            setOAuth({
+                session,
+                agent,
+            });
     };
 
     const handleSubmit = () => {
