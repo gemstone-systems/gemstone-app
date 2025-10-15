@@ -1,4 +1,4 @@
-import type { DidPlc } from "@/lib/types/atproto";
+import type { DidPlc, DidWeb } from "@/lib/types/atproto";
 import type { ShardMessage } from "@/lib/types/messages";
 import {
     validateHistoryMessage,
@@ -74,5 +74,5 @@ export function useWebSocket(url: string) {
 
 export interface SendMessageOpts {
     text: string;
-    did: DidPlc;
+    did: DidPlc | DidWeb;
 }

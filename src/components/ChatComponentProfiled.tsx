@@ -1,7 +1,7 @@
 import { Loading } from "@/components/Loading";
 import { Message } from "@/components/Message";
 import { useWebSocket } from "@/hooks/useWebSocket";
-import type { DidPlc } from "@/lib/types/atproto";
+import type { DidPlc, DidWeb } from "@/lib/types/atproto";
 import { getBskyProfile } from "@/queries/get-profile";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -15,7 +15,11 @@ import {
     Image,
 } from "react-native";
 
-export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
+export default function ChatComponentProfiled({
+    did,
+}: {
+    did: DidPlc | DidWeb;
+}) {
     const [inputText, setInputText] = useState("");
     const { messages, isConnected, sendMessage } = useWebSocket(
         "ws://localhost:8080",
@@ -39,8 +43,6 @@ export default function ChatComponentProfiled({ did }: { did: DidPlc }) {
             return await getBskyProfile(did);
         },
     });
-
-    if (!isPending) console.log(profile?.avatar);
 
     return isPending ? (
         <Loading />
