@@ -13,7 +13,9 @@ export default function Index() {
             }}
         >
             <Text>
-                {oAuth.session ? oAuth.session.serverMetadata.issuer : "no oauth session :("}
+                {oAuth.session
+                    ? oAuth.session.serverMetadata.issuer
+                    : "no oauth session :("}
             </Text>
             <Login />
         </View>

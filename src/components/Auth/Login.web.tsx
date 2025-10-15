@@ -1,15 +1,15 @@
 import { oAuthClient } from "@/lib/utils/atproto/oauth";
-import { useSetOAuthValue } from "@/providers/OAuthProvider";
+import { useOAuth } from "@/providers/OAuthProvider";
 import { Agent } from "@atproto/api";
 import { useState } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
 
 export const Login = () => {
     const [atprotoHandle, setAtprotoHandle] = useState("");
-    const setOAuth = useSetOAuthValue();
-
+    const [oAuth, setOAuth] = useOAuth();
+    const providedOAuthClient = oAuth.client ?? oAuthClient;
     const handlePress = async () => {
-        const session = await oAuthClient.signIn(atprotoHandle);
+        const session = await providedOAuthClient.signIn(atprotoHandle);
 
         const agent = new Agent(session);
         if (setOAuth)
