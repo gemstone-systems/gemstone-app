@@ -6,8 +6,10 @@ const queryClient = new QueryClient();
 
 export const Providers = ({ children }: { children: ReactNode }) => {
     return (
-        <QueryClientProvider client={queryClient}>
-            <OAuthProvider>{children}</OAuthProvider>
-        </QueryClientProvider>
+        <OAuthProvider>
+            <QueryClientProvider client={queryClient}>
+                {children}
+            </QueryClientProvider>
+        </OAuthProvider>
     );
 };
