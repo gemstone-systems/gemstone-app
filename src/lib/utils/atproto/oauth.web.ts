@@ -1,3 +1,4 @@
+import { isDevMode } from "@/lib/utils/env";
 import type {
     AuthorizeOptions,
     BrowserOAuthClient,
@@ -5,19 +6,7 @@ import type {
 } from "@atproto/oauth-client-browser";
 import type { ExpoOAuthClientOptions } from "@atproto/oauth-client-expo";
 import { ExpoOAuthClient as PbcExpoOAuthClient } from "@atproto/oauth-client-expo";
-
-const oAuthMetadata = {
-    client_id: "https://app.gmstn.systems/oauth-client-metadata.json",
-    client_name: "Gemstone",
-    client_uri: "https://app.gmstn.systems",
-    redirect_uris: ["systems.gmstn.app:/oauth/callback"],
-    scope: "atproto transition:generic",
-    token_endpoint_auth_method: "none",
-    response_types: ["code"],
-    grant_types: ["authorization_code", "refresh_token"],
-    application_type: "native",
-    dpop_bound_access_tokens: true,
-};
+import oAuthMetadata from "../../../../assets/oauth-client-metadata.json";
 
 // suuuuuch a hack holy shit
 export type TypedExpoOAuthClient = new (
@@ -33,10 +22,20 @@ export interface TypedExpoOAuthClientInstance extends BrowserOAuthClient {
 const ExpoOAuthClient = PbcExpoOAuthClient as unknown as TypedExpoOAuthClient;
 
 export const oAuthClient = new ExpoOAuthClient({
-    //@ts-expect-error funky wunky with typey wypies
-    clientMetadata: undefined,
+    // @ts-expect-error funky wunky with typey wypies
+    clientMetadata: isDevMode ? undefined : oAuthMetadata,
     handleResolver: "https://bsky.social",
 });
 
-const result = oAuthClient.init();
-console.log(result);
+const result = await oAuthClient.init();
+
+if (result && isDevMode) {
+    const { session, state } = result;
+    if (state != null) {
+        console.log(
+            `${session.sub} was successfully authenticated (state: ${state})`,
+        );
+    } else {
+        console.log(`${session.sub} was restored (last active session)`);
+    }
+}

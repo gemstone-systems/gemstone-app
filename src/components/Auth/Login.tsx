@@ -1,7 +1,6 @@
 import { oAuthClient } from "@/lib/utils/atproto/oauth";
 import { useSetOAuthValue } from "@/providers/OAuthProvider";
 import { Agent } from "@atproto/api";
-import type { OAuthSession } from "@atproto/oauth-client";
 import { useState } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
 
