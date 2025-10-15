@@ -81,3 +81,18 @@ export const useSetOAuthValue = () => {
     const [, setOAuth] = useContext(OAuthContext);
     return setOAuth;
 };
+
+export const useOAuthSession = () => {
+    const [oAuth] = useContext(OAuthContext);
+    return oAuth.session;
+};
+
+export const useOAuthAgent = () => {
+    const [oAuth] = useContext(OAuthContext);
+    return oAuth.agent;
+};
+
+export const useOAuthClient = () => {
+    const [oAuth] = useContext(OAuthContext);
+    return oAuth.client;
+};
