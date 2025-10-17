@@ -1,5 +1,5 @@
 import { Login } from "@/components/Auth/Login";
-import Loading from "@/components/Loading";
+import { Loading } from "@/components/Loading";
 import { useOAuthValue } from "@/providers/OAuthProvider";
 import { Redirect } from "expo-router";
 import { View } from "react-native";

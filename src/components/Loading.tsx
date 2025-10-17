@@ -7,5 +7,3 @@ export const Loading = () => {
         </View>
     );
 };
-
-export default Loading;
