@@ -1,6 +1,6 @@
 import { Loading } from "@/components/Loading";
 import { Message } from "@/components/Message";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useWebSocket } from "@/lib/hooks/useWebSocket";
 import type { DidPlc, DidWeb } from "@/lib/types/atproto";
 import { getBskyProfile } from "@/queries/get-profile";
 import { useQuery } from "@tanstack/react-query";
