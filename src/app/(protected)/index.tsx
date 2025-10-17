@@ -1,7 +1,7 @@
 import { Login } from "@/components/Auth/Login";
 import ChatComponentProfiled from "@/components/ChatComponentProfiled";
 import { useOAuthSession } from "@/providers/OAuthProvider";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { View } from "react-native";
 
 export default function Index() {
@@ -15,7 +15,11 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
-            {session ? <ChatComponentProfiled did={session.did} /> : <Login />}
+            {session ? (
+                <ChatComponentProfiled did={session.did} />
+            ) : (
+                <Redirect href={"/login"} />
+            )}
         </View>
     );
 }
