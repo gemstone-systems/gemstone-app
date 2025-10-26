@@ -3,9 +3,10 @@ const expoConfig = require("eslint-config-expo/flat");
 const js = require("@eslint/js");
 const globals = require("globals");
 const tseslint = require("typescript-eslint");
-const { defineConfig } = require("eslint/config");
+const { defineConfig, globalIgnores } = require("eslint/config");
 
 module.exports = defineConfig([
+    globalIgnores(["*.config.*", "dist/*"]),
     expoConfig,
     {
         files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
@@ -20,6 +21,7 @@ module.exports = defineConfig([
     {
         rules: {
             "@typescript-eslint/consistent-type-imports": "error",
+            "@typescript-eslint/array-type": ["error", { default: "generic" }],
         },
         languageOptions: {
             parserOptions: { projectService: true, tsconfigRootDir: __dirname },
