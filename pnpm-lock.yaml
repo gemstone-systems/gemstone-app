@@ -17,6 +17,9 @@ importers:
       '@atcute/client':
         specifier: ^4.0.4
         version: 4.0.4
+      '@atcute/identity-resolver':
+        specifier: ^1.1.4
+        version: 1.1.4(@atcute/identity@1.1.1)
       '@atproto/api':
         specifier: ^0.17.3
         version: 0.17.3
@@ -152,11 +155,19 @@ packages:
   '@atcute/client@4.0.4':
     resolution: {integrity: sha512-0vkYe6HcGAef8FS4dlGMqCCPG4I4Lve1R8Amk8UEviUVofiqlv1WGoeez9CJFL8G/7vhcgVV9rPTHLJEjZ4RdQ==}
 
+  '@atcute/identity-resolver@1.1.4':
+    resolution: {integrity: sha512-/SVh8vf2cXFJenmBnGeYF2aY3WGQm3cJeew5NWTlkqoy3LvJ5wkvKq9PWu4Tv653VF40rPOp6LOdVr9Fa+q5rA==}
+    peerDependencies:
+      '@atcute/identity': ^1.0.0
+
   '@atcute/identity@1.1.1':
     resolution: {integrity: sha512-zax42n693VEhnC+5tndvO2KLDTMkHOz8UExwmklvJv7R9VujfEwiSWhcv6Jgwb3ellaG8wjiQ1lMOIjLLvwh0Q==}
 
   '@atcute/lexicons@1.2.2':
     resolution: {integrity: sha512-bgEhJq5Z70/0TbK5sx+tAkrR8FsCODNiL2gUEvS5PuJfPxmFmRYNWaMGehxSPaXWpU2+Oa9ckceHiYbrItDTkA==}
+
+  '@atcute/util-fetch@1.0.3':
+    resolution: {integrity: sha512-f8zzTb/xlKIwv2OQ31DhShPUNCmIIleX6p7qIXwWwEUjX6x8skUtpdISSjnImq01LXpltGV5y8yhV4/Mlb7CRQ==}
 
   '@atproto-labs/did-resolver@0.2.2':
     resolution: {integrity: sha512-ca2B7xR43tVoQ8XxBvha58DXwIH8cIyKQl6lpOKGkPUrJuFoO4iCLlDiSDi2Ueh+yE1rMDPP/qveHdajgDX3WQ==}
@@ -4566,6 +4577,13 @@ snapshots:
       '@atcute/identity': 1.1.1
       '@atcute/lexicons': 1.2.2
 
+  '@atcute/identity-resolver@1.1.4(@atcute/identity@1.1.1)':
+    dependencies:
+      '@atcute/identity': 1.1.1
+      '@atcute/lexicons': 1.2.2
+      '@atcute/util-fetch': 1.0.3
+      '@badrap/valita': 0.4.6
+
   '@atcute/identity@1.1.1':
     dependencies:
       '@atcute/lexicons': 1.2.2
@@ -4575,6 +4593,10 @@ snapshots:
     dependencies:
       '@standard-schema/spec': 1.0.0
       esm-env: 1.2.2
+
+  '@atcute/util-fetch@1.0.3':
+    dependencies:
+      '@badrap/valita': 0.4.6
 
   '@atproto-labs/did-resolver@0.2.2':
     dependencies:
