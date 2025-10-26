@@ -1,5 +1,5 @@
 import { isDevMode } from "@/lib/utils/env";
-import { Providers } from "@/providers";
+import { RootProviders } from "@/providers";
 import { Stack } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
@@ -26,8 +26,8 @@ export default function RootLayout() {
     });
 
     return (
-        <Providers>
+        <RootProviders>
             <Stack />
-        </Providers>
+        </RootProviders>
     );
 }

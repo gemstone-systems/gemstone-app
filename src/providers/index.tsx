@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 const queryClient = new QueryClient();
 
-export const Providers = ({ children }: { children: ReactNode }) => {
+export const RootProviders = ({ children }: { children: ReactNode }) => {
     return (
         <OAuthProvider>
             <QueryClientProvider client={queryClient}>
