@@ -16,7 +16,7 @@ export interface OAuth {
 }
 
 const OAuthContext = createContext<[OAuth, Dispatch<OAuth> | undefined]>([
-    { session: undefined, agent: undefined, isLoading: true },
+    { isLoading: true },
     undefined,
 ]);
 
