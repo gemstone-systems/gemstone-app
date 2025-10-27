@@ -8,7 +8,7 @@ import type { OAuthSession } from "@atproto/oauth-client";
 import type { ReactNode, Dispatch } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 
-interface OAuth {
+export interface OAuth {
     session?: OAuthSession;
     agent?: Agent;
     client?: TypedExpoOAuthClientInstance;
