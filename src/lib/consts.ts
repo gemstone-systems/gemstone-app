@@ -17,3 +17,5 @@ export const __DEV__loopbackOAuthMetadata = {
     dpop_bound_access_tokens: true,
     subject_type: "public",
 };
+
+export const DEFAULT_STALE_TIME = 5 * 60 * 1000;
