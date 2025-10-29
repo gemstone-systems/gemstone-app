@@ -1,6 +1,5 @@
 import type { Did } from "@/lib/types/atproto";
 import type { ShardMessage } from "@/lib/types/messages";
-import type { Dispatch, SetStateAction } from "react";
 
 export const sendShardMessage = (
     {
