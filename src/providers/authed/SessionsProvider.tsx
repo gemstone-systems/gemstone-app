@@ -15,6 +15,10 @@ interface SessionsContextValue {
     isInitialising: boolean;
     error: Error | null;
     getSession: (sessionInfo: LatticeSessionInfo) => WebSocket | undefined;
+    findChannelSession: (channel: AtUri) => {
+        sessionInfo: LatticeSessionInfo | undefined;
+        socket: WebSocket | undefined;
+    };
 }
 
 const SessionsContext = createContext<SessionsContextValue | null>(null);
@@ -31,7 +35,7 @@ export const useSessions = () => {
 // TODO: remove this. temp testing function
 export const useFirstSessionWsTemp = () => {
     const wss = useSessions().sessionsMap.values().toArray();
-    if(wss.length === 0) return;
+    if (wss.length === 0) return;
     return wss[0];
 };
 
@@ -71,6 +75,19 @@ export const SessionsProvider = ({ children }: { children: ReactNode }) => {
         error,
         getSession: (sessionInfo: LatticeSessionInfo) =>
             sessionsMap.get(sessionInfo),
+        findChannelSession: (channel: AtUri) => {
+            const sessionInfo = sessionsMap
+                .keys()
+                .find((sessionInfo) =>
+                    sessionInfo.allowedChannels.includes(channel),
+                );
+            if (!sessionInfo)
+                throw new Error(
+                    "Provided channel at:// URI (object) could not be found in any existing lattice sessions",
+                );
+
+            return { sessionInfo, socket: sessionsMap.get(sessionInfo) };
+        },
     };
 
     return <SessionsContext value={value}>{children}</SessionsContext>;
