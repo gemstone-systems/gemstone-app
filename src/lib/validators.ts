@@ -7,14 +7,16 @@ import {
 import type { Result } from "@/lib/utils/result";
 import { z } from "zod";
 
-export const validateWsMessageString = (data: unknown) => {
+export const validateWsMessageString = (
+    data: unknown,
+): Result<string, unknown> => {
     const { success, error, data: message } = z.string().safeParse(data);
     if (!success) {
         console.error("Error decoding websocket message");
         console.error(error);
-        return;
+        return { ok: false, error: z.treeifyError(error) };
     }
-    return message;
+    return { ok: true, data: message };
 };
 
 export const validateWsMessageType = (
