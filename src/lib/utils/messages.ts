@@ -24,13 +24,3 @@ export const sendShardMessage = (
     if (latticeSocket.readyState === WebSocket.OPEN)
         latticeSocket.send(JSON.stringify(message));
 };
-
-export const shardMessageHandler = ({
-    incomingMessage,
-    setMessages,
-}: {
-    incomingMessage: ShardMessage;
-    setMessages: Dispatch<SetStateAction<Array<ShardMessage>>>;
-}) => {
-    setMessages((prev) => [...prev, incomingMessage]);
-};
