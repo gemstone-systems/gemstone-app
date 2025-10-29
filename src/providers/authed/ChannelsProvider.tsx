@@ -61,7 +61,7 @@ export const ChannelsProvider = ({ children }: { children: ReactNode }) => {
 
     const channelsQueries = useQueries({
         queries: memberships.map((membershipObjects) => ({
-            enabled: membershipsInitialising,
+            enabled: !membershipsInitialising,
             queryKey: ["channel", membershipObjects.membership.channel.uri],
             queryFn: () => channelQueryFn(membershipObjects.channelAtUri),
             staleTime: DEFAULT_STALE_TIME,

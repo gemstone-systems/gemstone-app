@@ -21,9 +21,7 @@ export default function ChatComponentProfiled({
     did: DidPlc | DidWeb;
 }) {
     const [inputText, setInputText] = useState("");
-    const { messages, isConnected, sendMessage } = useWebSocket(
-        "ws://localhost:8080",
-    );
+    const { messages, isConnected, sendMessage } = useWebSocket();
 
     const handleSend = () => {
         if (inputText.trim()) {

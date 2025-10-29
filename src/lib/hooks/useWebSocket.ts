@@ -6,23 +6,22 @@ import {
     validateWsMessageString,
     validateWsMessageType,
 } from "@/lib/validators";
-import { useEffect, useRef, useState } from "react";
+import { useFirstSessionWsTemp } from "@/providers/authed/SessionsProvider";
+import { useEffect, useState } from "react";
 
-export function useWebSocket(url: string) {
-    const [messages, setMessages] = useState<ShardMessage[]>([]);
+export function useWebSocket() {
+    const [messages, setMessages] = useState<Array<ShardMessage>>([]);
     const [isConnected, setIsConnected] = useState(false);
-    const ws = useRef<WebSocket | null>(null);
+    const ws = useFirstSessionWsTemp();
 
     useEffect(() => {
-        // Connect to WebSocket
-        ws.current = new WebSocket(url);
-
-        ws.current.onopen = () => {
+        if(!ws) return;
+        ws.onopen = () => {
             console.log("Connected to WebSocket");
             setIsConnected(true);
         };
 
-        ws.current.onmessage = (event) => {
+        ws.onmessage = (event) => {
             const eventData = validateWsMessageString(event.data);
             if (!eventData) return;
 
@@ -41,24 +40,25 @@ export function useWebSocket(url: string) {
             }
         };
 
-        ws.current.onerror = (error) => {
+        ws.onerror = (error) => {
             console.error("WebSocket error:", error);
         };
 
-        ws.current.onclose = () => {
+        ws.onclose = () => {
             console.log("Disconnected from WebSocket");
             setIsConnected(false);
         };
 
         // Cleanup on unmount
         return () => {
-            ws.current?.close();
+            ws.close();
         };
-    }, [url]);
+    }, [ws]);
 
     const sendMessage = ({ text, did }: SendMessageOpts) => {
-        if (ws.current?.readyState === WebSocket.OPEN) {
-            ws.current.send(
+        if(!ws) return
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(
                 JSON.stringify({
                     type: "shard/message",
                     text,
