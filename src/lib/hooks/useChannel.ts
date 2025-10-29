@@ -1,6 +1,6 @@
 import type { AtUri } from "@/lib/types/atproto";
-import type { ShardMessage } from "@/lib/types/messages";
-import { atUriToString } from "@/lib/utils/atproto";
+import { shardMessageSchema, type ShardMessage } from "@/lib/types/messages";
+import { atUriToString, stringToAtUri } from "@/lib/utils/atproto";
 import { sendShardMessage } from "@/lib/utils/messages";
 import {
     validateWsMessageString,
@@ -46,11 +46,23 @@ export const useChannel = (channel: AtUri) => {
             const { type: messageType } = validateTypeResult.data;
 
             switch (messageType) {
-                case "shard/message":
-                    setMessages((prev) => [
-                        ...prev,
-                        validateTypeResult.data as ShardMessage,
-                    ]);
+                case "shard/message": {
+                    const { success, data: shardMessage } =
+                        shardMessageSchema.safeParse(validateTypeResult.data);
+                    if (!success) return;
+
+                    const parseChannelResult = stringToAtUri(
+                        shardMessage.channel,
+                    );
+
+                    if (!parseChannelResult.ok) return;
+                    const { data: channelAtUri } = parseChannelResult;
+
+                    // eslint-disable-next-line eqeqeq -- we explicitly want a loose comparison here
+                    if (channelAtUri == channel)
+                        setMessages((prev) => [...prev, shardMessage]);
+                    break;
+                }
             }
         });
 
@@ -62,7 +74,7 @@ export const useChannel = (channel: AtUri) => {
             console.log("Disconnected from WebSocket");
             setIsConnected(false);
         });
-    }, [socket, sessionInfo]);
+    }, [socket, sessionInfo, channel]);
 
     if (!oAuthSession) throw new Error("No OAuth session");
     if (!sessionInfo)
