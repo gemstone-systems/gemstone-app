@@ -1,5 +1,5 @@
 import { DEFAULT_STALE_TIME } from "@/lib/consts";
-import type { Did } from "@/lib/types/atproto";
+import type { AtUri, Did } from "@/lib/types/atproto";
 import type { LatticeSessionInfo } from "@/lib/types/handshake";
 import type { SystemsGmstnDevelopmentChannelMembership } from "@/lib/types/lexicon/systems.gmstn.development.channel.membership";
 import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channels";
@@ -19,13 +19,13 @@ import { useQueries } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { createContext, useContext, useMemo } from "react";
 
-type HandshakesMap = Map<Did, LatticeSessionInfo>;
+type HandshakesMap = Map<AtUri, LatticeSessionInfo>;
 
 interface HandshakeContextValue {
     handshakesMap: HandshakesMap;
     isInitialising: boolean;
     error: Error | null;
-    getHandshake: (latticeDid: Did) => LatticeSessionInfo | undefined;
+    getHandshake: (latticeDid: AtUri) => LatticeSessionInfo | undefined;
 }
 
 const HandshakesContext = createContext<HandshakeContextValue | null>(null);
@@ -95,11 +95,11 @@ const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
         null;
 
     const handshakes = useMemo(() => {
-        const handshakesMap = new Map<Did, LatticeSessionInfo>();
+        const handshakesMap = new Map<AtUri, LatticeSessionInfo>();
         handshakeQueries.forEach((queryResult) => {
             if (queryResult.data) {
-                const { did, sessionInfo } = queryResult.data;
-                handshakesMap.set(did, sessionInfo);
+                const { latticeAtUri, sessionInfo } = queryResult.data;
+                handshakesMap.set(latticeAtUri, sessionInfo);
             }
         });
         return handshakesMap;
@@ -154,7 +154,7 @@ const handshakesQueryFn = async ({
     }
 
     return {
-        did,
+        latticeAtUri: latticeAtUri.data,
         sessionInfo: handshakeResult.data,
     };
 };
