@@ -58,13 +58,23 @@ const fetchRecords = async ({
             };
         const { records, cursor: nextCursor } = results.data;
 
-        const { success, error, data } = z
-            .array(systemsGmstnDevelopmentChannelMembershipRecordSchema)
+        const {
+            success,
+            error,
+            data: responses,
+        } = z
+            .array(
+                z.object({
+                    cid: z.string(),
+                    uri: z.string(),
+                    value: systemsGmstnDevelopmentChannelMembershipRecordSchema,
+                }),
+            )
             .safeParse(records);
 
         if (!success) return { ok: false, error: z.treeifyError(error) };
 
-        allRecords.push(...data);
+        allRecords.push(...responses.map((data) => data.value));
 
         if (records.length < 100) continueLoop = false;
         cursor = nextCursor;

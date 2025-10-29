@@ -9,7 +9,7 @@ import { initiateHandshakeTo } from "@/queries/initiate-handshake-to";
 import type { OAuthSession } from "@atproto/oauth-client";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { createContext, useMemo } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 type LatticeSessionsMap = Map<Did, LatticeSessionInfo>;
 
@@ -87,8 +87,9 @@ export const LatticeSessionsProvider = ({
                                       "Something went wrong while initiating handshakes",
                                   );
                               }
-                              // TODO: better validation
-                              const did = latticeAtUri.data.authority as Did;
+                              // TODO: unfuck this.
+                              const did =
+                                  `did:web:${encodeURIComponent(latticeAtUri.data.rKey ?? "")}` as Did;
                               const handshakeResult = await initiateHandshakeTo(
                                   {
                                       did,
@@ -211,4 +212,13 @@ const channelQueryFn = async (membership: AtUri) => {
         throw new Error("Something went wrong while fetching channel records");
     }
     return channel;
+};
+
+export const useLatticeSession = () => {
+    const value = useContext(LatticeSessionsContext);
+    if (value === null)
+        throw new Error(
+            "Lattice session context not inited. Or ordering of providers was wrong.",
+        );
+    return value.sessions;
 };

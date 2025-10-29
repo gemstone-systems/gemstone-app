@@ -1,10 +1,13 @@
 import ChatComponentProfiled from "@/components/ChatComponentProfiled";
+import { useLatticeSession } from "@/providers/authed/LatticeSessionsProvider";
 import { useOAuthSession } from "@/providers/OAuthProvider";
 import { Redirect } from "expo-router";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function Index() {
-    const session = useOAuthSession();
+    const oAuthSession = useOAuthSession();
+    const sessionsMap = useLatticeSession();
+    const sessions = sessionsMap.values().toArray();
     return (
         <View
             style={{
@@ -13,11 +16,14 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
-            {session ? (
-                <ChatComponentProfiled did={session.did} />
+            {oAuthSession ? (
+                <ChatComponentProfiled did={oAuthSession.did} />
             ) : (
                 <Redirect href={"/login"} />
             )}
+            {sessions.map((session, idx) => (
+                <Text key={idx}>{session.latticeDid}</Text>
+            ))}
         </View>
     );
 }
