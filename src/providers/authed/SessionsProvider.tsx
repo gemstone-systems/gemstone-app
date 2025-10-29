@@ -40,11 +40,13 @@ export const useFirstSessionWsTemp = () => {
 };
 
 export const SessionsProvider = ({ children }: { children: ReactNode }) => {
-    const { handshakesMap } = useHandshakes();
+    const { handshakesMap, isInitialising: handshakesInitialising } =
+        useHandshakes();
     const handshakes = handshakesMap.entries().toArray();
 
     const endpointQueries = useQueries({
         queries: handshakes.map((handshake) => ({
+            enabled: !handshakesInitialising,
             queryKey: ["lattice-endpoints", handshake[0].rKey],
             queryFn: async () => {
                 return await endpointQueryFn(handshake);
@@ -53,7 +55,10 @@ export const SessionsProvider = ({ children }: { children: ReactNode }) => {
         })),
     });
 
-    const isInitialising = endpointQueries.some((q) => q.isLoading);
+    console.log(endpointQueries);
+
+    const isInitialising =
+        handshakesInitialising || endpointQueries.some((q) => q.isLoading);
     const error = endpointQueries.find((q) => q.error)?.error ?? null;
 
     const sessionsMap = new Map<LatticeSessionInfo, WebSocket>();
@@ -76,11 +81,16 @@ export const SessionsProvider = ({ children }: { children: ReactNode }) => {
         getSession: (sessionInfo: LatticeSessionInfo) =>
             sessionsMap.get(sessionInfo),
         findChannelSession: (channel: AtUri) => {
-            const sessionInfo = sessionsMap
-                .keys()
-                .find((sessionInfo) =>
-                    sessionInfo.allowedChannels.includes(channel),
+            console.log("sessionsMap", sessionsMap);
+            const sessionInfo = sessionsMap.keys().find((sessionInfo) => {
+                const foundInfo = sessionInfo.allowedChannels.some(
+                    (allowedChannel) => allowedChannel.rKey === channel.rKey,
                 );
+                if (!foundInfo) return;
+                return sessionInfo;
+            });
+
+            console.log("tried to find", channel);
             if (!sessionInfo)
                 throw new Error(
                     "Provided channel at:// URI (object) could not be found in any existing lattice sessions",

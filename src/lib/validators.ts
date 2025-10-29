@@ -1,7 +1,5 @@
 import type { WebsocketMessage } from "@/lib/types/messages";
 import {
-    historyMessageSchema,
-    shardMessageSchema,
     websocketMessageSchema,
 } from "@/lib/types/messages";
 import type { Result } from "@/lib/utils/result";
@@ -35,36 +33,4 @@ export const validateWsMessageType = (
         return { ok: false, error: z.treeifyError(wsMessageError) };
     }
     return { ok: true, data: wsMessage };
-};
-
-export const validateHistoryMessage = (data: unknown) => {
-    const {
-        success: historySuccess,
-        error: historyError,
-        data: history,
-    } = historyMessageSchema.safeParse(data);
-    if (!historySuccess) {
-        console.error(
-            "History message schema parsing failed. Did your type drift?",
-        );
-        console.error(historyError);
-        return;
-    }
-    return history;
-};
-
-export const validateNewMessage = (data: unknown) => {
-    const {
-        success: messageSuccess,
-        error: messageError,
-        data: message,
-    } = shardMessageSchema.safeParse(data);
-    if (!messageSuccess) {
-        console.error(
-            "New message schema parsing failed. Did your type drift?",
-        );
-        console.error(messageError);
-        return;
-    }
-    return message;
 };

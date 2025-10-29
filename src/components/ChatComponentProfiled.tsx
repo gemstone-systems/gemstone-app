@@ -1,7 +1,7 @@
 import { Loading } from "@/components/Loading";
 import { Message } from "@/components/Message";
-import { useWebSocket } from "@/lib/hooks/useWebSocket";
-import type { DidPlc, DidWeb } from "@/lib/types/atproto";
+import { useChannel } from "@/lib/hooks/useChannel";
+import type { AtUri, DidPlc, DidWeb } from "@/lib/types/atproto";
 import { getBskyProfile } from "@/queries/get-profile";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -17,15 +17,19 @@ import {
 
 export default function ChatComponentProfiled({
     did,
+    channelAtUri,
 }: {
     did: DidPlc | DidWeb;
+    channelAtUri: AtUri
 }) {
     const [inputText, setInputText] = useState("");
-    const { messages, isConnected, sendMessage } = useWebSocket();
+    const { messages, sendMessageToChannel, isConnected } = useChannel(
+        channelAtUri,
+    );
 
     const handleSend = () => {
         if (inputText.trim()) {
-            sendMessage({ text: inputText, did });
+            sendMessageToChannel(inputText);
             setInputText("");
         }
     };

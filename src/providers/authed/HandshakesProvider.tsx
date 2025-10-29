@@ -69,6 +69,7 @@ const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
 
     const handshakeQueries = useQueries({
         queries: channels.map((channelObj) => ({
+            enabled: !channelsInitialising && !membershipsInitialising,
             queryKey: ["handshakes", channelObj.channel.name],
             queryFn: () =>
                 handshakesQueryFn({
@@ -83,7 +84,7 @@ const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
     });
 
     const isInitialising =
-        isOAuthReady ||
+        !isOAuthReady ||
         membershipsInitialising ||
         channelsInitialising ||
         handshakeQueries.some((q) => q.isLoading);
