@@ -1,6 +1,6 @@
-import { LatticeSessionsProvider } from "@/providers/authed/LatticeSessionsProvider";
+import { HandshakesProvider } from "@/providers/authed/HandshakesProvider";
 import type { ReactNode } from "react";
 
 export const AuthedProviders = ({ children }: { children: ReactNode }) => {
-    return <LatticeSessionsProvider>{children}</LatticeSessionsProvider>;
+    return <HandshakesProvider>{children}</HandshakesProvider>;
 };

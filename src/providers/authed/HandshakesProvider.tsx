@@ -19,33 +19,27 @@ import { useQueries } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { createContext, useContext, useMemo } from "react";
 
-type LatticeSessionsMap = Map<Did, LatticeSessionInfo>;
+type HandshakesMap = Map<Did, LatticeSessionInfo>;
 
-interface LatticeSessionContextValue {
-    sessions: LatticeSessionsMap;
+interface HandshakeContextValue {
+    handshakesMap: HandshakesMap;
     isInitialising: boolean;
     error: Error | null;
-    getSession: (latticeDid: Did) => LatticeSessionInfo | undefined;
+    getHandshake: (latticeDid: Did) => LatticeSessionInfo | undefined;
 }
 
-const LatticeSessionsContext = createContext<LatticeSessionContextValue | null>(
-    null,
-);
+const HandshakesContext = createContext<HandshakeContextValue | null>(null);
 
-export const useLatticeSession = () => {
-    const value = useContext(LatticeSessionsContext);
-    if (value === null)
+export const useHandshakes = () => {
+    const handshakesValue = useContext(HandshakesContext);
+    if (!handshakesValue)
         throw new Error(
-            "Lattice session context not inited. Or ordering of providers was wrong.",
+            "Handshakes context was null. Did you try to access this outside of the authed providers? HandshakesProvider(Inner) must be below ChannelsProvider.",
         );
-    return value.sessions;
+    return handshakesValue;
 };
 
-const LatticeSessionsProviderInner = ({
-    children,
-}: {
-    children: ReactNode;
-}) => {
+const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
     const {
         memberships,
         isInitialising: membershipsInitialising,
@@ -64,8 +58,14 @@ const LatticeSessionsProviderInner = ({
             "LatticeSessionsProvider must be used within an OAuth provider.",
         );
 
-    const { session, isLoading, agent, client } = oauth;
-    const isOAuthReady = !isLoading && !!agent && !!client && !!session;
+    const {
+        session: oAuthSession,
+        isLoading: isOauthLoading,
+        agent: oAuthAgent,
+        client: oAuthClient,
+    } = oauth;
+    const isOAuthReady =
+        !isOauthLoading && !!oAuthAgent && !!oAuthClient && !!oAuthSession;
 
     const handshakeQueries = useQueries({
         queries: channels.map((channelObj) => ({
@@ -94,29 +94,25 @@ const LatticeSessionsProviderInner = ({
         handshakeQueries.find((q) => q.error)?.error ??
         null;
 
-    const sessions = useMemo(() => {
-        const sessionsMap = new Map<Did, LatticeSessionInfo>();
+    const handshakes = useMemo(() => {
+        const handshakesMap = new Map<Did, LatticeSessionInfo>();
         handshakeQueries.forEach((queryResult) => {
             if (queryResult.data) {
                 const { did, sessionInfo } = queryResult.data;
-                sessionsMap.set(did, sessionInfo);
+                handshakesMap.set(did, sessionInfo);
             }
         });
-        return sessionsMap;
+        return handshakesMap;
     }, [handshakeQueries]);
 
-    const value: LatticeSessionContextValue = {
+    const value: HandshakeContextValue = {
         isInitialising,
         error,
-        sessions,
-        getSession: (latticeDid) => sessions.get(latticeDid),
+        handshakesMap: handshakes,
+        getHandshake: (latticeDid) => handshakes.get(latticeDid),
     };
 
-    return (
-        <LatticeSessionsContext value={value}>
-            {children}
-        </LatticeSessionsContext>
-    );
+    return <HandshakesContext value={value}>{children}</HandshakesContext>;
 };
 
 const handshakesQueryFn = async ({
@@ -163,20 +159,14 @@ const handshakesQueryFn = async ({
     };
 };
 
-export const LatticeSessionsProvider = ({
-    children,
-}: {
-    children: ReactNode;
-}) => {
+export const HandshakesProvider = ({ children }: { children: ReactNode }) => {
     // Memberships must be above channels
     // channels must be above lattice sessions inner
     // do it this way to preserve the order if we need to move them around some day
     return (
         <MembershipsProvider>
             <ChannelsProvider>
-                <LatticeSessionsProviderInner>
-                    {children}
-                </LatticeSessionsProviderInner>
+                <HandshakesProviderInner>{children}</HandshakesProviderInner>
             </ChannelsProvider>
         </MembershipsProvider>
     );

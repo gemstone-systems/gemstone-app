@@ -24,7 +24,7 @@ export const useMemberships = () => {
     const membershipsValue = useContext(MembershipsContext);
     if (!membershipsValue)
         throw new Error(
-            "Memberships context was null. Did you try to access this outside of the authed providers? MembershipsProvider must be below OAuth provider.",
+            "Memberships context was null. Did you try to access this outside of the authed providers? MembershipsProvider must be below OAuthProvider.",
         );
     return membershipsValue;
 };

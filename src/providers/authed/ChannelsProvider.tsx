@@ -25,7 +25,7 @@ export const useChannelRecords = () => {
     const channelsValue = useContext(ChannelsContext);
     if (!channelsValue)
         throw new Error(
-            "Channels context was null. Did you try to access this outside of the authed providers? ChannelsProvider must be below OAuth provider.",
+            "Channels context was null. Did you try to access this outside of the authed providers? ChannelsProvider must be below MembershipsProvider.",
         );
     return channelsValue;
 };
