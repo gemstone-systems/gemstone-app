@@ -15,7 +15,7 @@ export function useWebSocket() {
     const ws = useFirstSessionWsTemp();
 
     useEffect(() => {
-        if(!ws) return;
+        if (!ws) return;
         ws.onopen = () => {
             console.log("Connected to WebSocket");
             setIsConnected(true);
@@ -26,9 +26,10 @@ export function useWebSocket() {
             if (!eventData) return;
 
             const data: unknown = JSON.parse(eventData);
-            const wsMessage = validateWsMessageType(data);
-            if (!wsMessage) return;
+            const validateResult = validateWsMessageType(data);
+            if (!validateResult.ok) return;
 
+            const { data: wsMessage } = validateResult;
             if (wsMessage.type === "shard/history") {
                 const history = validateHistoryMessage(wsMessage);
                 if (!history) return;
@@ -56,7 +57,7 @@ export function useWebSocket() {
     }, [ws]);
 
     const sendMessage = ({ text, did }: SendMessageOpts) => {
-        if(!ws) return
+        if (!ws) return;
         if (ws.readyState === WebSocket.OPEN) {
             ws.send(
                 JSON.stringify({

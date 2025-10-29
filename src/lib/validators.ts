@@ -1,8 +1,10 @@
+import type { WebsocketMessage } from "@/lib/types/messages";
 import {
     historyMessageSchema,
     shardMessageSchema,
     websocketMessageSchema,
 } from "@/lib/types/messages";
+import type { Result } from "@/lib/utils/result";
 import { z } from "zod";
 
 export const validateWsMessageString = (data: unknown) => {
@@ -15,20 +17,22 @@ export const validateWsMessageString = (data: unknown) => {
     return message;
 };
 
-export const validateWsMessageType = (data: unknown) => {
+export const validateWsMessageType = (
+    data: unknown,
+): Result<WebsocketMessage, unknown> => {
     const {
         success: wsMessageSuccess,
         error: wsMessageError,
         data: wsMessage,
-    } = websocketMessageSchema.loose().safeParse(data);
+    } = websocketMessageSchema.safeParse(data);
     if (!wsMessageSuccess) {
         console.error(
             "Error parsing websocket message. The data might be the wrong shape.",
         );
         console.error(wsMessageError);
-        return;
+        return { ok: false, error: z.treeifyError(wsMessageError) };
     }
-    return wsMessage;
+    return { ok: true, data: wsMessage };
 };
 
 export const validateHistoryMessage = (data: unknown) => {
