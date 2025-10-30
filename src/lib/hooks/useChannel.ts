@@ -1,6 +1,6 @@
 import type { AtUri } from "@/lib/types/atproto";
 import { shardMessageSchema, type ShardMessage } from "@/lib/types/messages";
-import { atUriToString, stringToAtUri } from "@/lib/utils/atproto";
+import { atUriEquals, atUriToString, stringToAtUri } from "@/lib/utils/atproto";
 import { sendShardMessage } from "@/lib/utils/messages";
 import {
     validateWsMessageString,
@@ -36,6 +36,7 @@ export const useChannel = (channel: AtUri) => {
         });
 
         socket.addEventListener("message", (event) => {
+            console.log("received message", event);
             const validateEventResult = validateWsMessageString(event.data);
             if (!validateEventResult.ok) return;
 
@@ -58,8 +59,8 @@ export const useChannel = (channel: AtUri) => {
                     if (!parseChannelResult.ok) return;
                     const { data: channelAtUri } = parseChannelResult;
 
-                    // eslint-disable-next-line eqeqeq -- we explicitly want a loose comparison here
-                    if (channelAtUri == channel)
+                     
+                    if (atUriEquals(channelAtUri, channel))
                         setMessages((prev) => [...prev, shardMessage]);
                     break;
                 }
@@ -91,6 +92,7 @@ export const useChannel = (channel: AtUri) => {
     const sendMessageToChannel = (content: string) => {
         sendShardMessage(
             {
+                sessionToken: sessionInfo.token,
                 content,
                 channel: channelStringified,
                 sentBy: oAuthSession.did,
