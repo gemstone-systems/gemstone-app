@@ -1,10 +1,10 @@
-import type { DidPlc } from "@/lib/types/atproto";
+import type { Did } from "@/lib/types/atproto";
 import { getBskyProfile } from "@/queries/get-profile";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Image, View, Text, StyleSheet } from "react-native";
 
-export const Avatar = React.memo(({ did }: { did: DidPlc }) => {
+export const Avatar = React.memo(({ did }: { did: Did }) => {
     const {
         data: profile,
         isPending,

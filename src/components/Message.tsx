@@ -5,11 +5,11 @@ import { Text, View, StyleSheet } from "react-native";
 export const Message = ({ message }: { message: ShardMessage }) => {
     return (
         <View style={styles.messageItemContainer}>
-            <Avatar did={message.did} />
+            <Avatar did={message.sentBy} />
             <View style={styles.messageItem}>
-                <Text style={styles.messageText}>{message.text}</Text>
+                <Text style={styles.messageText}>{message.content}</Text>
                 <Text style={styles.timestamp}>
-                    {new Date(message.timestamp).toLocaleTimeString()}
+                    {new Date(message.sentAt).toLocaleTimeString()}
                 </Text>
             </View>
         </View>

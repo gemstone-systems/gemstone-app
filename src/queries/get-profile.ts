@@ -1,7 +1,7 @@
-import type { DidPlc, DidWeb } from "@/lib/types/atproto";
+import type { Did, DidPlc, DidWeb } from "@/lib/types/atproto";
 import { bskyClient } from "@/lib/utils/atproto/client";
 
-export const getBskyProfile = async (did: DidPlc | DidWeb) => {
+export const getBskyProfile = async (did: Did) => {
     const { ok, data } = await bskyClient.get("app.bsky.actor.getProfile", {
         params: {
             actor: did,
