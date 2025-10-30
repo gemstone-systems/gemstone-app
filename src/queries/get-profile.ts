@@ -1,4 +1,4 @@
-import type { Did, DidPlc, DidWeb } from "@/lib/types/atproto";
+import type { Did } from "@/lib/types/atproto";
 import { bskyClient } from "@/lib/utils/atproto/client";
 
 export const getBskyProfile = async (did: Did) => {
