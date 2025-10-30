@@ -3,10 +3,12 @@ import type { ShardMessage } from "@/lib/types/messages";
 
 export const sendShardMessage = (
     {
+        sessionToken,
         content,
         channel,
         sentBy,
     }: {
+        sessionToken: string;
         content: string;
         channel: string;
         sentBy: Did;
@@ -15,6 +17,7 @@ export const sendShardMessage = (
 ) => {
     const message: ShardMessage = {
         type: "shard/message",
+        sessionToken,
         content,
         channel,
         sentBy,
