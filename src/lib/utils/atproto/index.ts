@@ -220,3 +220,11 @@ export const getEndpointFromDid = async (
     }
     return { ok: true, data: shardUrl };
 };
+
+export const atUriEquals = (a: AtUri, b: AtUri) => {
+    return (
+        a.authority === b.authority &&
+        a.collection === b.collection &&
+        a.rKey === b.rKey
+    );
+};
