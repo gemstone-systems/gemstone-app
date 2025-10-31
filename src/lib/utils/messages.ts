@@ -7,11 +7,13 @@ export const sendShardMessage = (
         content,
         channel,
         sentBy,
+        routedThrough
     }: {
         sessionToken: string;
         content: string;
         channel: string;
         sentBy: Did;
+        routedThrough: Did,
     },
     latticeSocket: WebSocket,
 ) => {
@@ -21,6 +23,7 @@ export const sendShardMessage = (
         content,
         channel,
         sentBy,
+        routedThrough,
         sentAt: new Date(),
     };
     if (latticeSocket.readyState === WebSocket.OPEN)

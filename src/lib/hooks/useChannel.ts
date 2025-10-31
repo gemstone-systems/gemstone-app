@@ -96,6 +96,7 @@ export const useChannel = (channel: AtUri) => {
                 content,
                 channel: channelStringified,
                 sentBy: oAuthSession.did,
+                routedThrough: sessionInfo.latticeDid,
             },
             socket,
         );
