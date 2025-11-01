@@ -1,5 +1,6 @@
 import type { AtUri } from "@/lib/types/atproto";
-import { shardMessageSchema, type ShardMessage } from "@/lib/types/messages";
+import type { RequestHistoryMessage, ShardMessage } from "@/lib/types/messages";
+import { historyMessageSchema, shardMessageSchema } from "@/lib/types/messages";
 import { atUriEquals, atUriToString, stringToAtUri } from "@/lib/utils/atproto";
 import { sendShardMessage } from "@/lib/utils/messages";
 import {
@@ -30,10 +31,26 @@ export const useChannel = (channel: AtUri) => {
 
         // attach handlers here
 
-        socket.addEventListener("open", () => {
+        const handleOpen = () => {
             console.log("Connected to WebSocket");
             setIsConnected(true);
-        });
+            const requestHistoryMessage: RequestHistoryMessage = {
+                type: "shard/requestHistory",
+                channel: atUriToString(channel),
+                requestedBy: sessionInfo.clientDid,
+            };
+            console.log(
+                "requested history from lattice",
+                requestHistoryMessage,
+            );
+            socket.send(JSON.stringify(requestHistoryMessage));
+        };
+
+        if (socket.readyState === WebSocket.OPEN) {
+            handleOpen();
+        }
+
+        socket.addEventListener("open", handleOpen);
 
         socket.addEventListener("message", (event) => {
             console.log("received message", event);
@@ -63,6 +80,26 @@ export const useChannel = (channel: AtUri) => {
                         setMessages((prev) => [...prev, shardMessage]);
                     break;
                 }
+                case "shard/history": {
+                    console.log(
+                        "received history from lattice",
+                        validateTypeResult.data,
+                    );
+                    const { success, data: historyMessage } =
+                        historyMessageSchema.safeParse(validateTypeResult.data);
+                    if (!success) return;
+                    if (!historyMessage.messages) return;
+
+                    const parseChannelResult = stringToAtUri(
+                        historyMessage.channel,
+                    );
+
+                    if (!parseChannelResult.ok) return;
+                    const { data: channelAtUri } = parseChannelResult;
+
+                    if (atUriEquals(channelAtUri, channel))
+                        setMessages([...historyMessage.messages]);
+                }
             }
         });
 
@@ -74,6 +111,10 @@ export const useChannel = (channel: AtUri) => {
             console.log("Disconnected from WebSocket");
             setIsConnected(false);
         });
+        socket.addEventListener("open", handleOpen);
+        return () => {
+            socket.removeEventListener("open", handleOpen);
+        };
     }, [socket, sessionInfo, channel]);
 
     if (!oAuthSession) throw new Error("No OAuth session");
