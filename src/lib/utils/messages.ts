@@ -3,23 +3,21 @@ import type { ShardMessage } from "@/lib/types/messages";
 
 export const sendShardMessage = (
     {
-        sessionToken,
         content,
         channel,
         sentBy,
-        routedThrough
+        routedThrough,
     }: {
-        sessionToken: string;
         content: string;
         channel: string;
         sentBy: Did;
-        routedThrough: Did,
+        routedThrough: Did;
     },
     latticeSocket: WebSocket,
 ) => {
     const message: ShardMessage = {
         type: "shard/message",
-        sessionToken,
+
         content,
         channel,
         sentBy,

@@ -59,7 +59,6 @@ export const useChannel = (channel: AtUri) => {
                     if (!parseChannelResult.ok) return;
                     const { data: channelAtUri } = parseChannelResult;
 
-                     
                     if (atUriEquals(channelAtUri, channel))
                         setMessages((prev) => [...prev, shardMessage]);
                     break;
@@ -92,7 +91,6 @@ export const useChannel = (channel: AtUri) => {
     const sendMessageToChannel = (content: string) => {
         sendShardMessage(
             {
-                sessionToken: sessionInfo.token,
                 content,
                 channel: channelStringified,
                 sentBy: oAuthSession.did,
