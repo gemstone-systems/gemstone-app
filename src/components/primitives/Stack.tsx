@@ -1,5 +1,9 @@
+import { isDevMode } from "@/lib/utils/env";
+import { useDebugState } from "@/providers/DebugProvider";
 import { Stack as ExpoStack } from "expo-router";
 
 export const Stack = () => {
-    return <ExpoStack screenOptions={{ headerShown: false }} />;
+    const debugValue = useDebugState();
+    const { showStackHeader } = debugValue;
+    return <ExpoStack screenOptions={{ headerShown: showStackHeader }} />;
 };
