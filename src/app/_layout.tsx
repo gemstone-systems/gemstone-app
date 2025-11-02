@@ -1,6 +1,6 @@
+import { Stack } from "@/components/primitives/Stack";
 import { isDevMode } from "@/lib/utils/env";
 import { RootProviders } from "@/providers";
-import { Stack } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
 
