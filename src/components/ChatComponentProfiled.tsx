@@ -2,8 +2,7 @@ import { Loading } from "@/components/Loading";
 import { Message } from "@/components/Message";
 import { useChannel } from "@/lib/hooks/useChannel";
 import type { AtUri, DidPlc, DidWeb } from "@/lib/types/atproto";
-import { getBskyProfile } from "@/queries/get-profile";
-import { useQuery } from "@tanstack/react-query";
+import { useProfile } from "@/providers/authed/ProfileProvider";
 import { useState } from "react";
 import {
     View,
@@ -16,16 +15,13 @@ import {
 } from "react-native";
 
 export default function ChatComponentProfiled({
-    did,
     channelAtUri,
 }: {
-    did: DidPlc | DidWeb;
-    channelAtUri: AtUri
+    channelAtUri: AtUri;
 }) {
     const [inputText, setInputText] = useState("");
-    const { messages, sendMessageToChannel, isConnected } = useChannel(
-        channelAtUri,
-    );
+    const { messages, sendMessageToChannel, isConnected } =
+        useChannel(channelAtUri);
 
     const handleSend = () => {
         if (inputText.trim()) {
@@ -34,25 +30,10 @@ export default function ChatComponentProfiled({
         }
     };
 
-    const {
-        data: profile,
-        isPending,
-        isError,
-        error,
-    } = useQuery({
-        queryKey: [did],
-        queryFn: async () => {
-            return await getBskyProfile(did);
-        },
-    });
+    const { profile, isLoading } = useProfile();
 
-    return isPending ? (
+    return isLoading ? (
         <Loading />
-    ) : isError ? (
-        <View>
-            <Text>Something went wrong :(</Text>
-            <Text>{error.message}</Text>
-        </View>
     ) : (
         <View style={styles.container}>
             {profile && (
