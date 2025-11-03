@@ -12,7 +12,7 @@ import {
     MembershipsProvider,
     useMemberships,
 } from "@/providers/authed/MembershipsProvider";
-import type { OAuthContextValue} from "@/providers/OAuthProvider";
+import type { OAuthContextValue } from "@/providers/OAuthProvider";
 import { useOAuthValue } from "@/providers/OAuthProvider";
 import { initiateHandshakeTo } from "@/queries/initiate-handshake-to";
 import { useQueries } from "@tanstack/react-query";
@@ -62,10 +62,8 @@ const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
         session: oAuthSession,
         isLoading: isOauthLoading,
         agent: oAuthAgent,
-        client: oAuthClient,
     } = oauth;
-    const isOAuthReady =
-        !isOauthLoading && !!oAuthAgent && !!oAuthClient && !!oAuthSession;
+    const isOAuthReady = !isOauthLoading && !!oAuthAgent && !!oAuthSession;
 
     const handshakeQueries = useQueries({
         queries: channels.map((channelObj) => ({
