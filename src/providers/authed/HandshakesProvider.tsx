@@ -1,4 +1,3 @@
-import { DEFAULT_STALE_TIME } from "@/lib/consts";
 import type { AtUri, Did } from "@/lib/types/atproto";
 import type { LatticeSessionInfo } from "@/lib/types/handshake";
 import type { SystemsGmstnDevelopmentChannelMembership } from "@/lib/types/lexicon/systems.gmstn.development.channel.membership";
@@ -77,7 +76,7 @@ const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
                     ),
                     oauth,
                 }),
-            staleTime: DEFAULT_STALE_TIME,
+            staleTime: Infinity,
         })),
     });
 
