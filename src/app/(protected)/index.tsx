@@ -11,7 +11,7 @@ export default function Index() {
     const { channels } = useChannelRecords();
     const { isInitialising } = useSessions();
 
-    const isAppReady = channels.length > 0 && !isInitialising;
+    const isAppReady = !isInitialising;
     return (
         <View
             style={{
@@ -30,7 +30,7 @@ export default function Index() {
                     <Loading />
                 )
             ) : (
-                <Redirect href={"/login"} />
+                <Redirect href="/login" />
             )}
         </View>
     );
