@@ -65,7 +65,7 @@ export const OAuthProvider = ({ children }: { children: ReactNode }) => {
     const providedOAuthClient = oAuthClient;
     const [oAuth, setOAuth] = useState<OAuthContextValue>({
         client: providedOAuthClient,
-        isLoading: false,
+        isLoading: true,
     });
 
     useEffect(() => {
