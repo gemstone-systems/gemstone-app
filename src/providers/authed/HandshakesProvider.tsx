@@ -12,7 +12,7 @@ import {
     MembershipsProvider,
     useMemberships,
 } from "@/providers/authed/MembershipsProvider";
-import type { OAuth } from "@/providers/OAuthProvider";
+import type { OAuthContextValue} from "@/providers/OAuthProvider";
 import { useOAuthValue } from "@/providers/OAuthProvider";
 import { initiateHandshakeTo } from "@/queries/initiate-handshake-to";
 import { useQueries } from "@tanstack/react-query";
@@ -123,7 +123,7 @@ const handshakesQueryFn = async ({
 }: {
     channel: SystemsGmstnDevelopmentChannel;
     memberships: Array<SystemsGmstnDevelopmentChannelMembership>;
-    oauth: OAuth;
+    oauth: OAuthContextValue;
 }) => {
     const { routeThrough } = channel;
     const latticeAtUri = stringToAtUri(routeThrough.uri);

@@ -5,45 +5,78 @@ import {
 import { isDevMode } from "@/lib/utils/env";
 import { Agent } from "@atproto/api";
 import type { OAuthSession } from "@atproto/oauth-client";
-import type { ReactNode, Dispatch } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 
-export interface OAuth {
+export interface OAuthContextValue {
     session?: OAuthSession;
     agent?: Agent;
     client?: TypedExpoOAuthClientInstance;
     isLoading: boolean;
 }
 
-const OAuthContext = createContext<[OAuth, Dispatch<OAuth> | undefined]>([
-    { isLoading: true },
-    undefined,
-]);
+const OAuthContext = createContext<
+    [OAuthContextValue, Dispatch<SetStateAction<OAuthContextValue>>] | null
+>(null);
+
+export const useOAuthValue = () => {
+    const value = useContext(OAuthContext);
+    if (!value)
+        throw new Error(
+            "OAuth provider failed to initialise. Did you access this out of tree somehow? Tried to access OAuth value before it was initialised.",
+        );
+    return value[0];
+};
+
+export const useOAuthSetter = () => {
+    const value = useContext(OAuthContext);
+    if (!value)
+        throw new Error(
+            "OAuth provider failed to initialise. Did you access this out of tree somehow? Tried to access OAuth value before it was initialised.",
+        );
+    return value[1];
+};
+
+export const useOAuthSession = () => {
+    const { session } = useOAuthValue();
+    return session;
+};
+
+export const useOAuthAgent = () => {
+    const { agent } = useOAuthValue();
+    return agent;
+};
+
+export const useOAuthClient = () => {
+    const { client } = useOAuthValue();
+    return client;
+};
 
 export const OAuthProvider = ({ children }: { children: ReactNode }) => {
     const providedOAuthClient = oAuthClient;
-    const [oAuth, setOAuth] = useState<OAuth>({
-        session: undefined,
-        agent: undefined,
+    const [oAuth, setOAuth] = useState<OAuthContextValue>({
         client: providedOAuthClient,
-        isLoading: true,
+        isLoading: false,
     });
 
     useEffect(() => {
         const initOAuth = async () => {
             try {
                 const result = await providedOAuthClient.init();
-                if (result && isDevMode) {
+                if (result) {
                     const { session, state } = result;
-                    console.log("session state:", state);
-                    if (state != null) {
-                        console.log(
-                            `${session.sub} was successfully authenticated (state: ${state})`,
-                        );
-                    } else {
-                        console.log(
-                            `${session.sub} was restored (last active session), token_endpoint: ${session.serverMetadata.token_endpoint}`,
-                        );
+
+                    if (isDevMode) {
+                        console.log("session state:", state);
+                        if (state != null) {
+                            console.log(
+                                `${session.sub} was successfully authenticated (state: ${state})`,
+                            );
+                        } else {
+                            console.log(
+                                `${session.sub} was restored (last active session), token_endpoint: ${session.serverMetadata.token_endpoint}`,
+                            );
+                        }
                     }
                     const agent = new Agent(session);
                     setOAuth({
@@ -86,33 +119,4 @@ export const OAuthProvider = ({ children }: { children: ReactNode }) => {
     }, [providedOAuthClient]);
 
     return <OAuthContext value={[oAuth, setOAuth]}>{children}</OAuthContext>;
-};
-
-export const useOAuth = () => {
-    return useContext(OAuthContext);
-};
-
-export const useOAuthValue = () => {
-    const [oAuth] = useContext(OAuthContext);
-    return oAuth;
-};
-
-export const useSetOAuthValue = () => {
-    const [, setOAuth] = useContext(OAuthContext);
-    return setOAuth;
-};
-
-export const useOAuthSession = () => {
-    const [oAuth] = useContext(OAuthContext);
-    return oAuth.session;
-};
-
-export const useOAuthAgent = () => {
-    const [oAuth] = useContext(OAuthContext);
-    return oAuth.agent;
-};
-
-export const useOAuthClient = () => {
-    const [oAuth] = useContext(OAuthContext);
-    return oAuth.client;
 };
