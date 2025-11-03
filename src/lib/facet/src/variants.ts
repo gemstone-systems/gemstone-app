@@ -6,7 +6,7 @@ import type {
 export interface FacetVariants {
     pearl?: FacetPalette;
     obsidian?: FacetPalette;
-    [x: string]: FacetPalette | undefined;
+    [x: string & {}]: FacetPalette | undefined;
 }
 
 // const DEFAULT_LIGHT_MODE: FacetPalette = {
