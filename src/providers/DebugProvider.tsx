@@ -11,7 +11,7 @@ const DebugContext = createContext<DebugContextValue | null>(null);
 
 export const useDebugState = () => {
     const value = useContext(DebugContext);
-    if (value === null)
+    if (!value)
         throw new Error(
             "Debug provider failed to initialise. Did you access this out of tree somehow? Tried to access debug value before it was initialised.",
         );
