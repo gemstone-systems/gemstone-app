@@ -32,13 +32,6 @@ export const useSessions = () => {
     return sessionsValue;
 };
 
-// TODO: remove this. temp testing function
-export const useFirstSessionWsTemp = () => {
-    const wss = useSessions().sessionsMap.values().toArray();
-    if (wss.length === 0) return;
-    return wss[0];
-};
-
 export const SessionsProvider = ({ children }: { children: ReactNode }) => {
     const { handshakesMap, isInitialising: handshakesInitialising } =
         useHandshakes();
