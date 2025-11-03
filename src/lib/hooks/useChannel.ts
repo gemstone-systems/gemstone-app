@@ -46,12 +46,6 @@ export const useChannel = (channel: AtUri) => {
             socket.send(JSON.stringify(requestHistoryMessage));
         };
 
-        if (socket.readyState === WebSocket.OPEN) {
-            handleOpen();
-        }
-
-        socket.addEventListener("open", handleOpen);
-
         socket.addEventListener("message", (event) => {
             console.log("received message", event);
             const validateEventResult = validateWsMessageString(event.data);
@@ -111,7 +105,13 @@ export const useChannel = (channel: AtUri) => {
             console.log("Disconnected from WebSocket");
             setIsConnected(false);
         });
+
+        if (socket.readyState === WebSocket.OPEN) {
+            handleOpen();
+        }
+
         socket.addEventListener("open", handleOpen);
+
         return () => {
             socket.removeEventListener("open", handleOpen);
         };
