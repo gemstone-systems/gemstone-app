@@ -91,8 +91,8 @@ export const MembershipsProvider = ({ children }: { children: ReactNode }) => {
             "LatticeSessionsProvider must be used within an OAuth provider.",
         );
 
-    const { session, isLoading, agent, client } = oauth;
-    const isOAuthReady = !isLoading && !!agent && !!client && !!session;
+    const { session, isLoading, agent } = oauth;
+    const isOAuthReady = !isLoading && !!agent && !!session;
 
     const membershipsQuery = useQuery({
         queryKey: ["membership", session?.did],

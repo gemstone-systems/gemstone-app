@@ -1,4 +1,3 @@
-import { oAuthClient } from "@/lib/utils/atproto/oauth";
 import { useOAuthSetter, useOAuthValue } from "@/providers/OAuthProvider";
 import { Agent } from "@atproto/api";
 import { useState } from "react";
@@ -8,15 +7,16 @@ export const Login = () => {
     const [atprotoHandle, setAtprotoHandle] = useState("");
     const oAuth = useOAuthValue();
     const setOAuth = useOAuthSetter();
-    const providedOAuthClient = oAuth.client ?? oAuthClient;
+    const providedOAuthClient = oAuth.client;
+
     const handlePress = async () => {
         const session = await providedOAuthClient.signIn(atprotoHandle);
 
         const agent = new Agent(session);
-
         setOAuth({
             session,
             agent,
+            client: providedOAuthClient,
             isLoading: false,
         });
     };

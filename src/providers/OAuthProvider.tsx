@@ -11,7 +11,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 export interface OAuthContextValue {
     session?: OAuthSession;
     agent?: Agent;
-    client?: TypedExpoOAuthClientInstance;
+    client: TypedExpoOAuthClientInstance;
     isLoading: boolean;
 }
 
@@ -50,6 +50,15 @@ export const useOAuthAgent = () => {
 export const useOAuthClient = () => {
     const { client } = useOAuthValue();
     return client;
+};
+
+export const useOAuthSessionGuaranteed = () => {
+    const { session } = useOAuthValue();
+    if (!session)
+        throw new Error(
+            "Tried to access OAuth session before it was created. Ensure that you are calling useOAuthSessionGuaranteed *after* you have a valid OAuth session.",
+        );
+    return session;
 };
 
 export const OAuthProvider = ({ children }: { children: ReactNode }) => {
