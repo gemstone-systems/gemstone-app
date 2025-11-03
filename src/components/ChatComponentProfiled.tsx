@@ -1,7 +1,7 @@
 import { Loading } from "@/components/Loading";
 import { Message } from "@/components/Message";
 import { useChannel } from "@/lib/hooks/useChannel";
-import type { AtUri, DidPlc, DidWeb } from "@/lib/types/atproto";
+import type { AtUri } from "@/lib/types/atproto";
 import { useProfile } from "@/providers/authed/ProfileProvider";
 import { useState } from "react";
 import {
