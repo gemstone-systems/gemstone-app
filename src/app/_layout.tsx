@@ -1,5 +1,6 @@
 import { isDevMode } from "@/lib/utils/env";
 import { RootProviders } from "@/providers";
+import { useCurrentPalette } from "@/providers/ThemeProvider";
 import {
     Lexend_100Thin,
     Lexend_200ExtraLight,
@@ -14,7 +15,7 @@ import {
 } from "@expo-google-fonts/lexend";
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 
 const RootLayoutInner = () => {
     const [loaded, error] = useFonts({
@@ -28,6 +29,8 @@ const RootLayoutInner = () => {
         Lexend_800ExtraBold,
         Lexend_900Black,
     });
+
+    const { semantic } = useCurrentPalette();
 
     useEffect(() => {
         if (!isDevMode) return;
@@ -59,7 +62,11 @@ const RootLayoutInner = () => {
         return null;
     }
 
-    return <Slot />;
+    return (
+        <View style={{ backgroundColor: semantic.background, flex: 1 }}>
+            <Slot />
+        </View>
+    );
 };
 
 const RootLayout = () => {
