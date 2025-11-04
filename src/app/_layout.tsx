@@ -1,7 +1,5 @@
-import { Stack } from "@/components/primitives/Stack";
 import { isDevMode } from "@/lib/utils/env";
 import { RootProviders } from "@/providers";
-import { useCurrentPalette } from "@/providers/ThemeProvider";
 import {
     Lexend_100Thin,
     Lexend_200ExtraLight,
@@ -14,7 +12,7 @@ import {
     Lexend_900Black,
     useFonts,
 } from "@expo-google-fonts/lexend";
-import { SplashScreen } from "expo-router";
+import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
 
@@ -30,8 +28,6 @@ const RootLayoutInner = () => {
         Lexend_800ExtraBold,
         Lexend_900Black,
     });
-
-    const { semantic } = useCurrentPalette();
 
     useEffect(() => {
         if (!isDevMode) return;
@@ -63,15 +59,7 @@ const RootLayoutInner = () => {
         return null;
     }
 
-    return (
-        <Stack
-            screenOptions={{
-                contentStyle: {
-                    backgroundColor: semantic.background,
-                },
-            }}
-        />
-    );
+    return <Slot />;
 };
 
 const RootLayout = () => {
