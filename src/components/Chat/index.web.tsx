@@ -1,4 +1,4 @@
-import { Message } from "@/components/Message";
+import { Message } from "@/components/Chat/Message";
 import { Loading } from "@/components/primitives/Loading";
 import { Text } from "@/components/primitives/Text";
 import { useChannel } from "@/lib/hooks/useChannel";
