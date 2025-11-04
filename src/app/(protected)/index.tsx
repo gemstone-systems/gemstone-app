@@ -1,4 +1,4 @@
-import ChatComponentProfiled from "@/components/ChatComponentProfiled";
+import { Chat } from "@/components/Chat";
 import { Loading } from "@/components/primitives/Loading";
 import { useChannelRecords } from "@/providers/authed/ChannelsProvider";
 import { useSessions } from "@/providers/authed/SessionsProvider";
@@ -14,13 +14,11 @@ export default function Index() {
             style={{
                 flex: 1,
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "stretch",
             }}
         >
             {isAppReady ? (
-                <ChatComponentProfiled
-                    channelAtUri={channels[0].channelAtUri}
-                />
+                <Chat channelAtUri={channels[0].channelAtUri} />
             ) : (
                 <Loading />
             )}

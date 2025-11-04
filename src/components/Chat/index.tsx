@@ -1,12 +1,12 @@
-import { Loading } from "@/components/Loading";
 import { Message } from "@/components/Message";
+import { Loading } from "@/components/primitives/Loading";
+import { Text } from "@/components/primitives/Text";
 import { useChannel } from "@/lib/hooks/useChannel";
 import type { AtUri } from "@/lib/types/atproto";
 import { useProfile } from "@/providers/authed/ProfileProvider";
 import { useState } from "react";
 import {
     View,
-    Text,
     TextInput,
     TouchableOpacity,
     StyleSheet,
@@ -14,11 +14,7 @@ import {
     Image,
 } from "react-native";
 
-export default function ChatComponentProfiled({
-    channelAtUri,
-}: {
-    channelAtUri: AtUri;
-}) {
+export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
     const [inputText, setInputText] = useState("");
     const { messages, sendMessageToChannel, isConnected } =
         useChannel(channelAtUri);
@@ -35,7 +31,7 @@ export default function ChatComponentProfiled({
     return isLoading ? (
         <Loading />
     ) : (
-        <View style={styles.container}>
+        <View style={{ flex: 1, flexDirection: "column" }}>
             {profile && (
                 <View>
                     <View style={styles.profile}>
@@ -68,7 +64,7 @@ export default function ChatComponentProfiled({
                     style={styles.input}
                     value={inputText}
                     onChangeText={setInputText}
-                    placeholder="Type a message..."
+                    placeholder="boop"
                     onSubmitEditing={handleSend}
                 />
                 <TouchableOpacity
@@ -81,7 +77,7 @@ export default function ChatComponentProfiled({
             </View>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
