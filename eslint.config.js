@@ -5,6 +5,15 @@ const globals = require("globals");
 const tseslint = require("typescript-eslint");
 const { defineConfig, globalIgnores } = require("eslint/config");
 
+const restrictedImportPaths = [
+    {
+        name: "react-native",
+        importNames: ["Text"],
+        message:
+            "Don't use base React Native's Text component. Instead, use the Text component exported by @/components/primitives/Text",
+    },
+];
+
 module.exports = defineConfig([
     globalIgnores(["*.config.*", "dist/*"]),
     expoConfig,
@@ -22,6 +31,12 @@ module.exports = defineConfig([
         rules: {
             "@typescript-eslint/consistent-type-imports": "error",
             "@typescript-eslint/array-type": ["error", { default: "generic" }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    paths: restrictedImportPaths,
+                },
+            ],
         },
         languageOptions: {
             parserOptions: { projectService: true, tsconfigRootDir: __dirname },
