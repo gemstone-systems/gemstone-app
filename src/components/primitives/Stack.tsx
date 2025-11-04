@@ -12,6 +12,7 @@ export const Stack = ({
     const { showStackHeader } = debugValue;
     return (
         <ExpoStack
+            {...props}
             screenOptions={{ headerShown: showStackHeader, ...screenOptions }}
         />
     );
