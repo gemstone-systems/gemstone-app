@@ -1,5 +1,5 @@
 import { SessionGate } from "@/components/Auth/SessionGate";
-import { ChannelsDrawer } from "@/components/Navigation/ChannelsDrawer";
+import { ChannelsPicker } from "@/components/Navigation/ChannelsPicker";
 import { TopBar } from "@/components/Navigation/TopBar";
 import { Stack } from "@/components/primitives/Stack";
 import { AuthedProviders } from "@/providers/authed";
@@ -8,6 +8,7 @@ import { View } from "react-native";
 
 export default function ProtectedLayout() {
     const { semantic } = useCurrentPalette();
+
     return (
         <SessionGate>
             <AuthedProviders>
@@ -19,14 +20,16 @@ export default function ProtectedLayout() {
                     }}
                 >
                     <TopBar />
-                    <ChannelsDrawer />
-                    <Stack
-                        screenOptions={{
-                            contentStyle: {
-                                backgroundColor: semantic.background,
-                            },
-                        }}
-                    />
+                    <View style={{ flex: 1, flexDirection: "row" }}>
+                        <ChannelsPicker />
+                        <Stack
+                            screenOptions={{
+                                contentStyle: {
+                                    backgroundColor: semantic.background,
+                                },
+                            }}
+                        />
+                    </View>
                 </View>
             </AuthedProviders>
         </SessionGate>

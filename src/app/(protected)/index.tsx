@@ -1,11 +1,9 @@
-import { Chat } from "@/components/Chat";
+import { Home } from "@/components/Home";
 import { Loading } from "@/components/primitives/Loading";
-import { useChannelRecords } from "@/providers/authed/ChannelsProvider";
 import { useSessions } from "@/providers/authed/SessionsProvider";
 import { View } from "react-native";
 
 export default function Index() {
-    const { channels } = useChannelRecords();
     const { isInitialising } = useSessions();
 
     const isAppReady = !isInitialising;
@@ -17,11 +15,7 @@ export default function Index() {
                 alignItems: "stretch",
             }}
         >
-            {isAppReady ? (
-                <Chat channelAtUri={channels[0].channelAtUri} />
-            ) : (
-                <Loading />
-            )}
+            {isAppReady ? <Home /> : <Loading />}
         </View>
     );
 }
