@@ -1,10 +1,16 @@
 import { Stack } from "@/components/primitives/Stack";
 import { isDevMode } from "@/lib/utils/env";
 import { RootProviders } from "@/providers";
+import { Lexend_300Light, useFonts } from "@expo-google-fonts/lexend";
+import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
 
 export default function RootLayout() {
+    const [loaded, error] = useFonts({
+        Lexend_300Light,
+    });
+
     useEffect(() => {
         if (!isDevMode) return;
         if (Platform.OS === "web" && typeof window !== "undefined") {
@@ -24,6 +30,16 @@ export default function RootLayout() {
             );
         }
     });
+
+    useEffect(() => {
+        if (loaded || error) {
+            void SplashScreen.hideAsync();
+        }
+    }, [loaded, error]);
+
+    if (!loaded && !error) {
+        return null;
+    }
 
     return (
         <RootProviders>
