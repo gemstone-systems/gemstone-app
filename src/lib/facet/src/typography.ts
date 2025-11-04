@@ -8,7 +8,7 @@ export interface FacetFontFamilies {
 }
 
 const DEFAULT_FONT_FAMILIES: FacetFontFamilies = {
-    primary: "Lexend",
+    primary: "Lexend_300Light",
     monospace: "Maple Mono",
 };
 
