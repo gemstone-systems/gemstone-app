@@ -19,7 +19,7 @@ export const useDebugState = () => {
 };
 
 export const DebugProvider = ({ children }: { children: ReactNode }) => {
-    const [showStackHeader, setShowStackHeader] = useState(isDevMode);
+    const [showStackHeader, setShowStackHeader] = useState(false);
 
     const value: DebugContextValue = {
         showStackHeader,
