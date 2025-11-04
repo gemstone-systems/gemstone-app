@@ -1,14 +1,33 @@
 import { Stack } from "@/components/primitives/Stack";
 import { isDevMode } from "@/lib/utils/env";
 import { RootProviders } from "@/providers";
-import { Lexend_300Light, useFonts } from "@expo-google-fonts/lexend";
+import {
+    Lexend_100Thin,
+    Lexend_200ExtraLight,
+    Lexend_300Light,
+    Lexend_400Regular,
+    Lexend_500Medium,
+    Lexend_600SemiBold,
+    Lexend_700Bold,
+    Lexend_800ExtraBold,
+    Lexend_900Black,
+    useFonts,
+} from "@expo-google-fonts/lexend";
 import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
 
 export default function RootLayout() {
     const [loaded, error] = useFonts({
+        Lexend_100Thin,
+        Lexend_200ExtraLight,
         Lexend_300Light,
+        Lexend_400Regular,
+        Lexend_500Medium,
+        Lexend_600SemiBold,
+        Lexend_700Bold,
+        Lexend_800ExtraBold,
+        Lexend_900Black,
     });
 
     useEffect(() => {
