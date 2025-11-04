@@ -16,6 +16,9 @@ export interface FacetPaletteSemantics {
     surface: HexCode;
     surfaceVariant: HexCode;
 
+    border: HexCode;
+    borderVariant?: HexCode;
+
     text: HexCode;
     textSecondary: HexCode;
     textTertiary: HexCode;
@@ -37,6 +40,7 @@ export interface FacetPaletteSemantics {
     warningLight?: HexCode;
     info: HexCode;
     infoLight?: HexCode;
+    
 }
 
 // Basically Catppuccin tbh
