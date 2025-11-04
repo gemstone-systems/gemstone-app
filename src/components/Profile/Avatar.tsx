@@ -1,8 +1,9 @@
+import { Text } from "@/components/primitives/Text";
 import type { Did } from "@/lib/types/atproto";
 import { getBskyProfile } from "@/queries/get-profile";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { Image, View, Text, StyleSheet } from "react-native";
+import { Image, View } from "react-native";
 
 export const Avatar = React.memo(({ did }: { did: Did }) => {
     const {
@@ -23,7 +24,11 @@ export const Avatar = React.memo(({ did }: { did: Did }) => {
     ) : (
         profile && (
             <Image
-                style={styles.avatar}
+                style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 2000000000,
+                }}
                 source={{ uri: profile.avatar ?? profile.handle }}
             />
         )
@@ -31,11 +36,3 @@ export const Avatar = React.memo(({ did }: { did: Did }) => {
 });
 
 Avatar.displayName = "Avatar";
-
-const styles = StyleSheet.create({
-    avatar: {
-        width: 32,
-        height: 32,
-        borderRadius: 2000000000,
-    },
-});
