@@ -11,6 +11,11 @@ const restrictedImportPaths = [
         importNames: ["Text"],
         message:
             "Don't use base React Native's Text component. Instead, use the Text component exported by @/components/primitives/Text",
+    },{
+        name: "react-native",
+        importNames: ["Stack"],
+        message:
+            "Don't use base React Native's Stack component. Instead, use the Stack component exported by @/components/primitives/Stack",
     },
 ];
 
