@@ -17,7 +17,10 @@ export const Text = ({
     return (
         <RnText
             {...props}
-            style={[{ fontFamily: typography.families.primary }, style]}
+            style={[
+                { fontFamily: typography.families.primary, fontWeight: 300 },
+                style,
+            ]}
         >
             {children}
         </RnText>
