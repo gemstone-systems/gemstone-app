@@ -1,4 +1,4 @@
-import { Loading } from "@/components/Loading";
+import { Loading } from "@/components/primitives/Loading";
 import { useOAuthValue } from "@/providers/OAuthProvider";
 import { Redirect } from "expo-router";
 import type { ReactNode } from "react";

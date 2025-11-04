@@ -1,5 +1,5 @@
 import ChatComponentProfiled from "@/components/ChatComponentProfiled";
-import { Loading } from "@/components/Loading";
+import { Loading } from "@/components/primitives/Loading";
 import { useChannelRecords } from "@/providers/authed/ChannelsProvider";
 import { useSessions } from "@/providers/authed/SessionsProvider";
 import { View } from "react-native";
