@@ -9,7 +9,7 @@ import { View } from "react-native";
 
 export const Message = ({ message }: { message: ShardMessage }) => {
     const { typography } = useFacet();
-    const { semantic } = useCurrentPalette()
+    const { semantic } = useCurrentPalette();
 
     const sentAtString = format(new Date(message.sentAt), "h:mm aaa");
 

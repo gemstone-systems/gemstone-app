@@ -42,7 +42,6 @@ export interface FacetPaletteSemantics {
     warningLight?: HexCode;
     info: HexCode;
     infoLight?: HexCode;
-    
 }
 
 // Basically Catppuccin tbh
