@@ -43,6 +43,7 @@ export const ChannelsPicker = () => {
                 padding: 12,
                 paddingTop: 6,
                 borderTopRightRadius: atoms.radii.xl,
+                minWidth: 200,
             }}
         >
             {spaces.map((space) => (
