@@ -4,7 +4,11 @@ import {
     systemsGmstnDevelopmentChannelRecordSchema,
     type SystemsGmstnDevelopmentChannel,
 } from "@/lib/types/lexicon/systems.gmstn.development.channels";
-import { getRecordFromFullAtUri, stringToAtUri } from "@/lib/utils/atproto";
+import {
+    atUriEquals,
+    getRecordFromFullAtUri,
+    stringToAtUri,
+} from "@/lib/utils/atproto";
 import { useMemberships } from "@/providers/authed/MembershipsProvider";
 import { useQueries } from "@tanstack/react-query";
 import type { ReactNode } from "react";
@@ -32,7 +36,9 @@ export const useChannelRecords = () => {
 
 export const useChannelRecordByAtUriObject = (channelAtUri: AtUri) => {
     const { channels } = useChannelRecords();
-    return channels.find((channel) => channel.channelAtUri === channelAtUri);
+    return channels.find((channel) =>
+        atUriEquals(channel.channelAtUri, channelAtUri),
+    );
 };
 
 export const useChannelRecordByAtUriString = (channelAtUriString: string) => {
