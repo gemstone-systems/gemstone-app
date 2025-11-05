@@ -32,7 +32,14 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
     return isLoading ? (
         <Loading />
     ) : (
-        <View style={{ flex: 1, flexDirection: "column" }}>
+        <View
+            style={{
+                flex: 1,
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "stretch",
+            }}
+        >
             {profile && (
                 <View>
                     <View
