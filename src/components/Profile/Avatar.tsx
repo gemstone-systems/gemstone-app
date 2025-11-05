@@ -11,7 +11,7 @@ export const Avatar = React.memo(({ did }: { did: Did }) => {
         isPending,
         isError,
     } = useQuery({
-        queryKey: [did],
+        queryKey: ["profile", did],
         queryFn: async () => {
             return await getBskyProfile(did);
         },
