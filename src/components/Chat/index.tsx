@@ -4,22 +4,18 @@ import { Text } from "@/components/primitives/Text";
 import { useFacet } from "@/lib/facet";
 import { useChannel } from "@/lib/hooks/useChannel";
 import type { AtUri } from "@/lib/types/atproto";
+import { useChannelRecordByAtUriObject } from "@/providers/authed/ChannelsProvider";
 import { useProfile } from "@/providers/authed/ProfileProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
-import { ArrowUp } from "lucide-react-native";
+import { ArrowUp, Dot, Hash } from "lucide-react-native";
 import { useState } from "react";
-import {
-    View,
-    TextInput,
-    TouchableOpacity,
-    Image,
-    FlatList,
-} from "react-native";
+import { View, TextInput, TouchableOpacity, FlatList } from "react-native";
 
 export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
     const [inputText, setInputText] = useState("");
     const { messages, sendMessageToChannel, isConnected } =
         useChannel(channelAtUri);
+    const record = useChannelRecordByAtUriObject(channelAtUri);
     const { semantic } = useCurrentPalette();
     const { typography, atoms } = useFacet();
 
@@ -30,7 +26,17 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
         }
     };
 
-    const { profile, isLoading } = useProfile();
+    const { isLoading } = useProfile();
+
+    if (!record)
+        return (
+            <View>
+                <Text>
+                    Something has gone wrong. Could not resolve channel record
+                    from given at:// URI.
+                </Text>
+            </View>
+        );
 
     return isLoading ? (
         <Loading />
@@ -41,52 +47,88 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "stretch",
+                backgroundColor: semantic.backgroundDark,
             }}
         >
-            {profile && (
-                <View>
+            <View
+                style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    flexDirection: "row",
+                    boxShadow: atoms.boxShadows.lg,
+                    justifyContent: "space-between",
+                    backgroundColor: semantic.background,
+                    alignItems: "center",
+                }}
+            >
+                <View
+                    style={{
+                        flexDirection: "row",
+                        gap: 2,
+                        alignItems: "center",
+                    }}
+                >
                     <View
                         style={{
-                            display: "flex",
                             flexDirection: "row",
-                            justifyContent: "space-between",
-                            padding: 16,
-                            borderBottomWidth: 1,
-                            borderBottomColor: semantic.borderVariant,
+                            gap: 4,
                             alignItems: "center",
                         }}
                     >
-                        <Text>
-                            Hi, {profile.displayName ?? profile.handle}!
+                        <Hash
+                            style={{
+                                height: 16,
+                                width: 16,
+                            }}
+                            color={semantic.border}
+                        />
+                        <Text
+                            style={[
+                                {
+                                    color: semantic.textSecondary,
+                                },
+                                typography.sizes.sm,
+                            ]}
+                        >
+                            {record.channel.name}
                         </Text>
-                        {profile.avatar && (
-                            <Image
-                                style={{
-                                    width: 32,
-                                    height: 32,
-                                    borderRadius: atoms.radii.full,
-                                }}
-                                source={{ uri: profile.avatar }}
-                            />
-                        )}
+                    </View>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            gap: 2,
+                            alignItems: "center",
+                        }}
+                    >
+                        <Dot
+                            style={{
+                                height: 24,
+                                width: 24,
+                            }}
+                            color={semantic.border}
+                        />
+                        <Text
+                            style={[
+                                {
+                                    color: semantic.textTertiary,
+                                },
+                                typography.sizes.sm,
+                            ]}
+                        >
+                            {record.channel.topic}
+                        </Text>
                     </View>
                 </View>
-            )}
-            <View
-                style={{
-                    padding: 16,
-                    borderBottomWidth: 1,
-                    borderBottomColor: semantic.borderVariant,
-                }}
-            >
-                <Text
+                <View
                     style={{
-                        fontSize: 14,
-                        fontWeight: "600",
+                        width: 8,
+                        height: 8,
+                        borderRadius: atoms.radii.full,
+                        backgroundColor: isConnected
+                            ? semantic.positive
+                            : semantic.negative,
                     }}
-                >
-                    {isConnected ? "🟢 Connected" : "🔴 Disconnected"}
-                </Text>
+                />
             </View>
 
             <FlatList
@@ -110,24 +152,35 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
                 }}
             >
                 <TextInput
+                    editable={isConnected}
                     style={[
                         {
                             flex: 1,
                             borderWidth: 1,
-                            borderColor: semantic.border,
+                            borderColor: semantic.borderVariant,
                             borderRadius: 8,
                             paddingHorizontal: 12,
-                            paddingVertical: 10,
+                            paddingVertical: 12,
                             marginRight: 8,
                             color: semantic.text,
                             outline: "0",
+                            cursor: isConnected ? "" : "not-allowed",
+                            fontFamily: typography.families.primary,
                         },
-                        typography.sizes.base,
+                        // @ts-expect-error it's fiiiiiiine
+                        {
+                            fontWeight: typography.weights.extralight,
+                        },
+                        typography.sizes.sm,
                     ]}
+                    cursorColor={
+                        isConnected ? semantic.textTertiary : "transparent"
+                    }
+                    selectionColor={semantic.primary}
                     value={inputText}
                     onChangeText={setInputText}
-                    placeholder="boop"
-                    placeholderTextColor={semantic.textTertiary}
+                    placeholder={`Message #${record.channel.name}`}
+                    placeholderTextColor={semantic.border}
                     onSubmitEditing={handleSend}
                     // eslint-disable-next-line @typescript-eslint/no-deprecated -- can't get it working with the new prop.
                     blurOnSubmit={false}
