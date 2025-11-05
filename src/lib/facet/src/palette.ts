@@ -13,6 +13,8 @@ export interface FacetPaletteSemantics {
     secondaryDark?: HexCode;
 
     background: HexCode;
+    backgroundDark: HexCode;
+    backgroundDarker: HexCode;
     surface: HexCode;
     surfaceVariant: HexCode;
 
