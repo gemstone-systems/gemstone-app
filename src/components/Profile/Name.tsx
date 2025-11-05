@@ -27,7 +27,8 @@ export const Name = React.memo(({ did }: { did: Did }) => {
     ) : (
         profile && (
             <Text
-                style={{ fontWeight: typography.weights.extralight.toString() }}
+                // @ts-expect-error it's fiiiiiiiine
+                style={{ fontWeight: typography.weights.normal }}
             >
                 {profile.displayName ?? profile.handle}
             </Text>
