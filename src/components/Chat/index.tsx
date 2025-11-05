@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     ScrollView,
     Image,
+    FlatList,
 } from "react-native";
 
 export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
@@ -86,16 +87,16 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
                 </Text>
             </View>
 
-            <ScrollView
-                style={{
-                    flex: 1,
+            <FlatList
+                inverted
+                data={messages}
+                renderItem={({ item }) => <Message message={item} />}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={{
                     padding: 16,
                 }}
-            >
-                {messages.map((msg, index) => (
-                    <Message message={msg} key={index} />
-                ))}
-            </ScrollView>
+                style={{ flex: 1 }}
+            />
 
             <View
                 style={{
