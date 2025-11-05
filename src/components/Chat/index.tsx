@@ -167,10 +167,7 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
                             cursor: isConnected ? "" : "not-allowed",
                             fontFamily: typography.families.primary,
                         },
-                        // @ts-expect-error it's fiiiiiiine
-                        {
-                            fontWeight: typography.weights.extralight,
-                        },
+                        typography.weights.byName.extralight,
                         typography.sizes.sm,
                     ]}
                     cursorColor={

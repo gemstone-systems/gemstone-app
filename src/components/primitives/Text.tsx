@@ -21,10 +21,10 @@ export const Text = ({
             {...props}
             style={[
                 {
-                    fontFamily: typography.families.primary,
                     fontWeight: 300,
                     color: semantic.text,
                 },
+                typography.weights.byName.light,
                 style,
             ]}
         >

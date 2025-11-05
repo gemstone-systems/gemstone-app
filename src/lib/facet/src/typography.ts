@@ -97,6 +97,30 @@ const DEFAULT_FONT_WEIGHTS: FacetFontWeights = {
     black: "900",
 };
 
+export interface FacetFontWeightNames {
+    thin: { fontFamily: string };
+    extralight: { fontFamily: string };
+    light: { fontFamily: string };
+    normal: { fontFamily: string };
+    medium: { fontFamily: string };
+    semibold: { fontFamily: string };
+    bold: { fontFamily: string };
+    extrabold: { fontFamily: string };
+    black: { fontFamily: string };
+}
+
+const DEFAULT_FONT_WEIGHT_NAMES: FacetFontWeightNames = {
+    thin: { fontFamily: "Lexend_100Thin" },
+    extralight: { fontFamily: "Lexend_200ExtraLight" },
+    light: { fontFamily: "Lexend_300Light" },
+    normal: { fontFamily: "Lexend_400Regular" },
+    medium: { fontFamily: "Lexend_500Medium" },
+    semibold: { fontFamily: "Lexend_600SemiBold" },
+    bold: { fontFamily: "Lexend_700Bold" },
+    extrabold: { fontFamily: "Lexend_800ExtraBold" },
+    black: { fontFamily: "Lexend_900Black" },
+};
+
 export interface FacetLetterSpacings {
     tighter: number;
     tight: number;
@@ -143,7 +167,10 @@ export interface FacetTypography {
     families: FacetFontFamilies;
     styles: FacetFontStyles;
     sizes: FacetFontSizes;
-    weights: FacetFontWeights;
+    weights: {
+        byNumber: FacetFontWeights;
+        byName: FacetFontWeightNames;
+    };
     spacings: FacetLetterSpacings;
     tracking: FacetLetterSpacings;
     semantic: FacetTypographySemantics;
@@ -153,7 +180,10 @@ export const DEFAULT_FACET_TYPOGRAPHY: FacetTypography = {
     families: DEFAULT_FONT_FAMILIES,
     styles: DEFAULT_FONT_STYLES,
     sizes: DEFAULT_FONT_SIZES,
-    weights: DEFAULT_FONT_WEIGHTS,
+    weights: {
+        byNumber: DEFAULT_FONT_WEIGHTS,
+        byName: DEFAULT_FONT_WEIGHT_NAMES,
+    },
     spacings: DEFAULT_LETTER_SPACINGS,
     tracking: DEFAULT_LETTER_SPACINGS,
     semantic: DEFAULT_TYPOGRAPHY_SEMANTICS,

@@ -53,10 +53,7 @@ export const Message = ({ message }: { message: ShardMessage }) => {
                             {
                                 marginBottom: 4,
                             },
-                            // @ts-expect-error it's fiiiiiiine
-                            {
-                                fontWeight: typography.weights.extralight,
-                            },
+                            typography.weights.byName.extralight,
                             typography.sizes.sm,
                         ]}
                     >
