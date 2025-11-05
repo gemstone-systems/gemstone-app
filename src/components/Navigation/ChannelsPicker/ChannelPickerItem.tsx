@@ -44,16 +44,17 @@ export const ChannelPickerItem = ({
                         flex: 1,
                         flexDirection: "row",
                         alignItems: "center",
-                        paddingLeft: 4,
+                        paddingLeft: 8,
                         paddingRight: 8,
-                        paddingTop: 2,
-                        paddingBottom: 3,
-                        gap: 2,
+                        paddingTop: 4,
+                        paddingBottom: 5,
+                        gap: 8,
                         backgroundColor:
                             isCurrentChannel || hovered
                                 ? semantic.surface
                                 : undefined,
                         borderRadius: atoms.radii.lg,
+                        width: 196,
                     }}
                 >
                     <Hash
@@ -62,15 +63,18 @@ export const ChannelPickerItem = ({
                             width: 16,
                         }}
                         color={
-                            isCurrentChannel ? colors.subtext0 : colors.overlay2
+                            isCurrentChannel || hovered
+                                ? colors.text
+                                : colors.overlay2
                         }
                     />
                     <Text
                         style={[
                             {
-                                color: isCurrentChannel
-                                    ? colors.subtext0
-                                    : colors.overlay2,
+                                color:
+                                    isCurrentChannel || hovered
+                                        ? colors.text
+                                        : colors.overlay2,
                             },
                             typography.sizes.sm,
                         ]}
