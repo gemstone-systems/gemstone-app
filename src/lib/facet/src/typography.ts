@@ -74,27 +74,27 @@ const DEFAULT_FONT_STYLES: FacetFontStyles = {
 };
 
 export interface FacetFontWeights {
-    thin: number;
-    extralight: number;
-    light: number;
-    normal: number;
-    medium: number;
-    semibold: number;
-    bold: number;
-    extrabold: number;
-    black: number;
+    thin: string;
+    extralight: string;
+    light: string;
+    normal: string;
+    medium: string;
+    semibold: string;
+    bold: string;
+    extrabold: string;
+    black: string;
 }
 
 const DEFAULT_FONT_WEIGHTS: FacetFontWeights = {
-    thin: 100,
-    extralight: 200,
-    light: 300,
-    normal: 400,
-    medium: 500,
-    semibold: 600,
-    bold: 700,
-    extrabold: 800,
-    black: 900,
+    thin: "100",
+    extralight: "200",
+    light: "300",
+    normal: "400",
+    medium: "500",
+    semibold: "600",
+    bold: "700",
+    extrabold: "800",
+    black: "900",
 };
 
 export interface FacetLetterSpacings {
@@ -118,7 +118,7 @@ const DEFAULT_LETTER_SPACINGS: FacetLetterSpacings = {
 export interface TypographySemantic {
     size: FacetFontSize;
     style: string;
-    weight: number;
+    weight: string;
     spacing: number;
 }
 
