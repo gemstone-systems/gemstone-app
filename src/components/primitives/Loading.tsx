@@ -3,7 +3,7 @@ import { useCurrentPalette } from "@/providers/ThemeProvider";
 import { ActivityIndicator, View } from "react-native";
 
 export const Loading = ({ color }: { color?: HexCode }) => {
-    const { semantic } = useCurrentPalette()
+    const { semantic } = useCurrentPalette();
     return (
         <View>
             <ActivityIndicator size="large" color={color ?? semantic.primary} />

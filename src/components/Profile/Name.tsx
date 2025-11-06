@@ -26,9 +26,7 @@ export const Name = React.memo(({ did }: { did: Did }) => {
         <Text>:(</Text>
     ) : (
         profile && (
-            <Text
-                style={typography.weights.byName.normal}
-            >
+            <Text style={typography.weights.byName.normal}>
                 {profile.displayName ?? profile.handle}
             </Text>
         )
