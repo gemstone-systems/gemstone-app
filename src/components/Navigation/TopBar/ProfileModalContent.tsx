@@ -9,7 +9,10 @@ export const ProfileModalContent = () => {
     const { semantic } = useCurrentPalette();
     const { atoms } = useFacet();
 
-    const listItemStyles: StyleProp<TextStyle> = { paddingHorizontal: 16 };
+    const listItemStyles: StyleProp<TextStyle> = {
+        paddingLeft: 16,
+        paddingRight: 32,
+    };
 
     return (
         <View
@@ -26,19 +29,13 @@ export const ProfileModalContent = () => {
             <Link href="/profile" style={listItemStyles} asChild>
                 <LinkText label="Profile" />
             </Link>
-            <Link href="/shards" style={listItemStyles}>
-                <LinkText label="Shards" />
-            </Link>
-            <Link href="/lattices" style={listItemStyles}>
-                <LinkText label="Lattices" />
-            </Link>
-            <Link href="/settings" style={listItemStyles}>
+            <Link href="/settings" style={listItemStyles} asChild>
                 <LinkText label="Settings" />
             </Link>
-            <Link href="/preferences" style={listItemStyles}>
+            <Link href="/preferences" style={listItemStyles} asChild>
                 <LinkText label="Preferences" />
             </Link>
-            <Link href="/logout" style={listItemStyles}>
+            <Link href="/logout" style={listItemStyles} asChild>
                 <LinkText
                     label="Log out"
                     style={{ color: semantic.negative }}
