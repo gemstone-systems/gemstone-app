@@ -17,7 +17,10 @@ export const TopBar = () => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 paddingRight: 16,
-                backgroundColor: semantic.background,
+                paddingVertical: 4,
+                backgroundColor: semantic.backgroundDark,
+                boxShadow: atoms.boxShadows.sm,
+                zIndex: 2,
             }}
         >
             <Link href="/">
