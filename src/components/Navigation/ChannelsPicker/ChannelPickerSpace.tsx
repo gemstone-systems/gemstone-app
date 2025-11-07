@@ -22,7 +22,7 @@ export const ChannelPickerSpace = ({
     const spaceDid = space[0];
 
     const { isLoading, data, error } = useQuery({
-        queryKey: ["handle", spaceDid],
+        queryKey: ["profile", spaceDid],
         queryFn: async () => {
             return await getBskyProfile(spaceDid as Did);
         },
