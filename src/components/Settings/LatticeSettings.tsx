@@ -150,9 +150,8 @@ export const LatticeSettings = () => {
                     >
                         <Pressable
                             style={{
-                                flex: 0,
+                                alignSelf: "center",
                                 cursor: "auto",
-                                alignItems: "center",
                             }}
                             onPress={(e) => {
                                 e.stopPropagation();
