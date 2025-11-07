@@ -2,7 +2,7 @@ import type { Did } from "@/lib/types/atproto";
 import {
     systemsGmstnDevelopmentChannelRecordSchema,
     type SystemsGmstnDevelopmentChannel,
-} from "@/lib/types/lexicon/systems.gmstn.development.channels";
+} from "@/lib/types/lexicon/systems.gmstn.development.channel";
 import type { Result } from "@/lib/utils/result";
 import { Client, simpleFetchHandler } from "@atcute/client";
 import { z } from "zod";

@@ -1,7 +1,7 @@
 import { Text } from "@/components/primitives/Text";
 import { useFacet } from "@/lib/facet";
 import type { AtUri } from "@/lib/types/atproto";
-import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channels";
+import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channel";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
 import { Link, usePathname } from "expo-router";
 import { Hash } from "lucide-react-native";

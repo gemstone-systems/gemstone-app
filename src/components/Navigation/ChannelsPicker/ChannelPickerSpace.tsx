@@ -2,7 +2,7 @@ import { ChannelPickerItem } from "@/components/Navigation/ChannelsPicker/Channe
 import { Loading } from "@/components/primitives/Loading";
 import { Text } from "@/components/primitives/Text";
 import type { AtUri, Did } from "@/lib/types/atproto";
-import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channels";
+import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channel";
 import { getBskyProfile } from "@/queries/get-profile";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";

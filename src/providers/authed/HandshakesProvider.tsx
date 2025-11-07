@@ -1,7 +1,7 @@
 import type { AtUri, Did } from "@/lib/types/atproto";
 import type { LatticeSessionInfo } from "@/lib/types/handshake";
 import type { SystemsGmstnDevelopmentChannelMembership } from "@/lib/types/lexicon/systems.gmstn.development.channel.membership";
-import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channels";
+import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channel";
 import { stringToAtUri } from "@/lib/utils/atproto";
 import {
     ChannelsProvider,

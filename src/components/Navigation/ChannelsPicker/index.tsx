@@ -2,7 +2,7 @@ import { ChannelPickerSpace } from "@/components/Navigation/ChannelsPicker/Chann
 import { Text } from "@/components/primitives/Text";
 import { useFacet } from "@/lib/facet";
 import type { AtUri } from "@/lib/types/atproto";
-import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channels";
+import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channel";
 import { useChannelRecords } from "@/providers/authed/ChannelsProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
 import { useMemo } from "react";

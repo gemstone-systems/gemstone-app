@@ -3,7 +3,7 @@ import type { AtUri } from "@/lib/types/atproto";
 import {
     systemsGmstnDevelopmentChannelRecordSchema,
     type SystemsGmstnDevelopmentChannel,
-} from "@/lib/types/lexicon/systems.gmstn.development.channels";
+} from "@/lib/types/lexicon/systems.gmstn.development.channel";
 import {
     atUriEquals,
     getRecordFromFullAtUri,
