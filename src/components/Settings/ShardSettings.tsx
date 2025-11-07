@@ -24,7 +24,7 @@ export const ShardSettings = () => {
     const { data: shards, isLoading } = useQuery({
         queryKey: ["shard", session.did],
         queryFn: async () => {
-            return await shardQueryFn(session);
+            return await shardsQueryFn(session);
         },
     });
 
@@ -157,7 +157,7 @@ export const ShardSettings = () => {
     );
 };
 
-const shardQueryFn = async (session: OAuthSession) => {
+const shardsQueryFn = async (session: OAuthSession) => {
     const shards = await getUserShards({
         pdsEndpoint: session.serverMetadata.issuer,
         did: session.did,
