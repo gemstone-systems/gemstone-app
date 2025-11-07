@@ -1,5 +1,4 @@
-import { comAtprotoRepoStrongRefSchema } from "@/lib/types/atproto";
-import { didSchema } from "@atproto/oauth-client";
+import { comAtprotoRepoStrongRefSchema, didSchema } from "@/lib/types/atproto";
 import { z } from "zod";
 
 export const systemsGmstnDevelopmentChannelInviteRecordSchema = z.object({
