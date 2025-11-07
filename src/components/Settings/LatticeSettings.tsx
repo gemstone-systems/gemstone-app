@@ -178,7 +178,7 @@ const latticeQueryFn = async (session: OAuthSession) => {
     if (!lattices.ok) {
         console.error("latticeQueryFn error.", lattices.error);
         throw new Error(
-            `Something went wrong while getting the user's membership records.}`,
+            `Something went wrong while getting the user's lattice records.}`,
         );
     }
 

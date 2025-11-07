@@ -178,7 +178,7 @@ const shardsQueryFn = async (session: OAuthSession) => {
     if (!shards.ok) {
         console.error("shardQueryFn error.", shards.error);
         throw new Error(
-            `Something went wrong while getting the user's membership records.}`,
+            `Something went wrong while getting the user's shard records.}`,
         );
     }
 
