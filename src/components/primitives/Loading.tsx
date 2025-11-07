@@ -1,4 +1,4 @@
-import type { HexCode } from "@/lib/facet/src/palette";
+import type { HexCode } from "@/lib/facet/src/lib/colors";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
 import { ActivityIndicator, View } from "react-native";
 
