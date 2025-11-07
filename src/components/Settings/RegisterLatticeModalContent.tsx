@@ -26,7 +26,7 @@ export const RegisterLatticeModalContent = ({
     const agent = useOAuthAgentGuaranteed();
     const session = useOAuthSessionGuaranteed();
     const queryClient = useQueryClient();
-    const { mutate: newShardMutation, isPending: mutationPending } =
+    const { mutate: newLatticeMutation, isPending: mutationPending } =
         useMutation({
             mutationFn: async () => {
                 const registerResult = await registerNewLattice({
@@ -106,7 +106,7 @@ export const RegisterLatticeModalContent = ({
                     paddingVertical: 10,
                 }}
                 onPress={() => {
-                    newShardMutation();
+                    newLatticeMutation();
                 }}
             >
                 {mutationPending ? (

@@ -9,14 +9,14 @@ import { BadgeCheck, X } from "lucide-react-native";
 import { View } from "react-native";
 
 export const LatticeInfo = ({
-    lattice: shard,
+    lattice,
 }: {
     lattice: {
         uri: Required<AtUri>;
         value: SystemsGmstnDevelopmentLattice;
     };
 }) => {
-    const latticeDomain = shard.uri.rKey;
+    const latticeDomain = lattice.uri.rKey;
     const { isLoading, data: latticeInfo } = useQuery({
         queryKey: ["shardInfo", latticeDomain],
         queryFn: async () => {
