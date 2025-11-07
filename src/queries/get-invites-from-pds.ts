@@ -1,9 +1,6 @@
 import type { Did } from "@/lib/types/atproto";
-import type {
-    SystemsGmstnDevelopmentChannelInvite} from "@/lib/types/lexicon/systems.gmstn.development.channel.invite";
-import {
-    systemsGmstnDevelopmentChannelInviteRecordSchema,
-} from "@/lib/types/lexicon/systems.gmstn.development.channel.invite";
+import type { SystemsGmstnDevelopmentChannelInvite } from "@/lib/types/lexicon/systems.gmstn.development.channel.invite";
+import { systemsGmstnDevelopmentChannelInviteRecordSchema } from "@/lib/types/lexicon/systems.gmstn.development.channel.invite";
 import type { Result } from "@/lib/utils/result";
 import { Client, simpleFetchHandler } from "@atcute/client";
 import { z } from "zod";
@@ -87,7 +84,6 @@ const fetchRecords = async ({
                 }),
             )
             .safeParse(records);
-
         if (!success) return { ok: false, error: z.treeifyError(error) };
 
         allRecords.push(
