@@ -1,4 +1,4 @@
-export type HexCode = `#${string}`;
+import type { HexCode } from "@/lib/facet/src/lib/colors";
 
 // I do actually like Catppuccin's spread, but we'll want to define our own
 // Especially to indicate differences in the strength of our UI signals.
