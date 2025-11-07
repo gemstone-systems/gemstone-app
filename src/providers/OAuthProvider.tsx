@@ -47,6 +47,15 @@ export const useOAuthAgent = () => {
     return agent;
 };
 
+export const useOAuthAgentGuaranteed = () => {
+    const { agent } = useOAuthValue();
+    if (!agent)
+        throw new Error(
+            "Tried to access OAuth agent before it was created. Ensure that you are calling useOAuthAgentGuaranteed *after* you have a valid OAuth session.",
+        );
+    return agent;
+};
+
 export const useOAuthClient = () => {
     const { client } = useOAuthValue();
     return client;
