@@ -28,7 +28,7 @@ export const ShardInfo = ({
     return (
         <View style={{ flexDirection: "row", gap: 6, alignItems: "center" }}>
             {isLoading ? (
-                <Loading />
+                <Loading size="small" />
             ) : (
                 <>
                     <Text>{shardDomain}</Text>

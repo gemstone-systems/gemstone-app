@@ -10,6 +10,7 @@ export const Settings = () => {
                 flexDirection: "column",
                 padding: 32,
                 gap: 16,
+                alignItems: "center",
             }}
         >
             <ShardSettings />
