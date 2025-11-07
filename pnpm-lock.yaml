@@ -20,6 +20,9 @@ importers:
       '@atcute/identity-resolver':
         specifier: ^1.1.4
         version: 1.1.4(@atcute/identity@1.1.1)
+      '@atcute/tid':
+        specifier: ^1.0.3
+        version: 1.0.3
       '@atproto/api':
         specifier: ^0.17.3
         version: 0.17.3
@@ -177,6 +180,9 @@ packages:
 
   '@atcute/lexicons@1.2.2':
     resolution: {integrity: sha512-bgEhJq5Z70/0TbK5sx+tAkrR8FsCODNiL2gUEvS5PuJfPxmFmRYNWaMGehxSPaXWpU2+Oa9ckceHiYbrItDTkA==}
+
+  '@atcute/tid@1.0.3':
+    resolution: {integrity: sha512-wfMJx1IMdnu0CZgWl0uR4JO2s6PGT1YPhpytD4ZHzEYKKQVuqV6Eb/7vieaVo1eYNMp2FrY67FZObeR7utRl2w==}
 
   '@atcute/util-fetch@1.0.3':
     resolution: {integrity: sha512-f8zzTb/xlKIwv2OQ31DhShPUNCmIIleX6p7qIXwWwEUjX6x8skUtpdISSjnImq01LXpltGV5y8yhV4/Mlb7CRQ==}
@@ -4649,6 +4655,8 @@ snapshots:
     dependencies:
       '@standard-schema/spec': 1.0.0
       esm-env: 1.2.2
+
+  '@atcute/tid@1.0.3': {}
 
   '@atcute/util-fetch@1.0.3':
     dependencies:
