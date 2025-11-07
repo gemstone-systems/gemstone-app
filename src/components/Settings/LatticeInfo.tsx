@@ -22,6 +22,7 @@ export const LatticeInfo = ({
         queryFn: async () => {
             return await getOwnerInfoFromLattice(latticeDomain);
         },
+        retry: 1,
     });
     const { semantic } = useCurrentPalette();
 

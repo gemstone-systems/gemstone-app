@@ -22,6 +22,7 @@ export const ShardInfo = ({
         queryFn: async () => {
             return await getOwnerInfoFromShard(shardDomain);
         },
+        retry: 1,
     });
     const { semantic } = useCurrentPalette();
 
