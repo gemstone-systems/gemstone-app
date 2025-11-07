@@ -127,7 +127,10 @@ export const ShardSettings = () => {
                             cursor: "auto",
                             alignItems: "center",
                             justifyContent: "center",
-                            backgroundColor: fade(semantic.backgroundDarker, 60),
+                            backgroundColor: fade(
+                                semantic.backgroundDarker,
+                                60,
+                            ),
                         }}
                         onPress={() => {
                             setShowRegisterModal(false);
@@ -143,7 +146,9 @@ export const ShardSettings = () => {
                                 e.stopPropagation();
                             }}
                         >
-                            <RegisterShardModalContent />
+                            <RegisterShardModalContent
+                                setShowRegisterModal={setShowRegisterModal}
+                            />
                         </Pressable>
                     </Pressable>
                 </Modal>
@@ -159,7 +164,7 @@ const shardQueryFn = async (session: OAuthSession) => {
     });
 
     if (!shards.ok) {
-        console.error("getMembershipRecordsFromPds error.", shards.error);
+        console.error("shardQueryFn error.", shards.error);
         throw new Error(
             `Something went wrong while getting the user's membership records.}`,
         );
