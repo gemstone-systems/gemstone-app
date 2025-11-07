@@ -1,9 +1,14 @@
+import { Loading } from "@/components/primitives/Loading";
 import { Text } from "@/components/primitives/Text";
 import { useFacet } from "@/lib/facet";
 import { registerNewShard } from "@/lib/utils/gmstn";
-import { useOAuthAgentGuaranteed } from "@/providers/OAuthProvider";
+import {
+    useOAuthAgentGuaranteed,
+    useOAuthSessionGuaranteed,
+} from "@/providers/OAuthProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
-import type { Dispatch, SetStateAction} from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
 
@@ -19,21 +24,40 @@ export const RegisterShardModalContent = ({
         undefined,
     );
     const agent = useOAuthAgentGuaranteed();
-    const handleSubmit = async () => {
-        const registerResult = await registerNewShard({
-            shardDomain: inputText,
-            agent,
+    const session = useOAuthSessionGuaranteed();
+    const queryClient = useQueryClient();
+    const { mutate: newShardMutation, isPending: mutationPending } =
+        useMutation({
+            mutationFn: async () => {
+                const registerResult = await registerNewShard({
+                    shardDomain: inputText,
+                    agent,
+                });
+                if (!registerResult.ok) {
+                    console.error(
+                        "Something went wrong when registering the shard.",
+                        registerResult.error,
+                    );
+                    throw new Error(
+                        `Something went wrong when registering the shard. ${registerResult.error}`,
+                    );
+                }
+                setShowRegisterModal(false);
+            },
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
+                    queryKey: ["shard", session.did],
+                });
+                setShowRegisterModal(false);
+            },
+            onError: (err) => {
+                console.error(
+                    "Something went wrong when registering the shard.",
+                    err,
+                );
+                setRegisterError(err.message);
+            },
         });
-        if (!registerResult.ok) {
-            console.error(
-                "Something went wrong when registering the shard.",
-                registerResult.error,
-            );
-            setRegisterError(registerResult.error);
-            return;
-        }
-        setShowRegisterModal(false);
-    };
 
     return (
         <View
@@ -82,19 +106,21 @@ export const RegisterShardModalContent = ({
                     paddingVertical: 10,
                 }}
                 onPress={() => {
-                    handleSubmit().catch((e: unknown) => {
-                        console.error(e);
-                    });
+                    newShardMutation();
                 }}
             >
-                <Text
-                    style={[
-                        typography.weights.byName.normal,
-                        { color: semantic.textInverse },
-                    ]}
-                >
-                    Register
-                </Text>
+                {mutationPending ? (
+                    <Loading size="small" />
+                ) : (
+                    <Text
+                        style={[
+                            typography.weights.byName.normal,
+                            { color: semantic.textInverse },
+                        ]}
+                    >
+                        Register
+                    </Text>
+                )}
             </Pressable>
         </View>
     );
