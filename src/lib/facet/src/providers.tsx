@@ -19,7 +19,7 @@ export const useAtoms = () => {
     return atoms;
 };
 
-type VariantName = keyof FacetVariants 
+type VariantName = keyof FacetVariants;
 
 export const useVariant = (variantName: VariantName) => {
     const { variants } = useFacet();
