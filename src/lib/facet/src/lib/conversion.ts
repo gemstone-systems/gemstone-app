@@ -224,6 +224,5 @@ export const hslToRgb = ({ h, s, l, a }: HslColor): RgbColor => {
 
 export const rgbObjectToString = ({ r, g, b, a }: RgbColor) => {
     const res = `rgba(${r.toString()}, ${g.toString()}, ${b.toString()}${a ? `, ${((a / 255) * 100).toString()}` : ""})`;
-    console.log(res);
     return res;
 };
