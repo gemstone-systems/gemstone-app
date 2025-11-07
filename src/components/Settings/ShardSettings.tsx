@@ -3,7 +3,7 @@ import { Text } from "@/components/primitives/Text";
 import { RegisterShardModalContent } from "@/components/Settings/RegisterShardModalContent";
 import { ShardInfo } from "@/components/Settings/ShardInfo";
 import { useFacet } from "@/lib/facet";
-import { fade } from "@/lib/facet/src/lib/colors";
+import { fade, lighten } from "@/lib/facet/src/lib/colors";
 import type { AtUri } from "@/lib/types/atproto";
 import { stringToAtUri } from "@/lib/utils/atproto";
 import { useOAuthSessionGuaranteed } from "@/providers/OAuthProvider";
@@ -88,30 +88,42 @@ export const ShardSettings = () => {
             )}
             <View>
                 <Pressable
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginLeft: 10,
-                        gap: 4,
-                        backgroundColor: semantic.primary,
-                        alignSelf: "flex-start",
-                        padding: 8,
-                        paddingRight: 12,
-                        borderRadius: atoms.radii.md,
-                    }}
+                    style={{ alignSelf: "flex-start", marginLeft: 10 }}
                     onPress={() => {
                         setShowRegisterModal(true);
                     }}
                 >
-                    <Plus height={16} width={16} color={semantic.textInverse} />
-                    <Text
-                        style={[
-                            typography.weights.byName.normal,
-                            { color: semantic.textInverse },
-                        ]}
-                    >
-                        Register a Shard
-                    </Text>
+                    {({ hovered }) => (
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+
+                                gap: 4,
+                                backgroundColor: hovered
+                                    ? lighten(semantic.primary, 5)
+                                    : semantic.primary,
+                                alignSelf: "flex-start",
+                                padding: 8,
+                                paddingRight: 12,
+                                borderRadius: atoms.radii.md,
+                            }}
+                        >
+                            <Plus
+                                height={16}
+                                width={16}
+                                color={semantic.textInverse}
+                            />
+                            <Text
+                                style={[
+                                    typography.weights.byName.normal,
+                                    { color: semantic.textInverse },
+                                ]}
+                            >
+                                Register a Shard
+                            </Text>
+                        </View>
+                    )}
                 </Pressable>
                 <Modal
                     visible={showRegisterModal}

@@ -33,11 +33,11 @@ export const lighten = (
     const hsl = hexToHsl(hex);
 
     if (typeof method !== "undefined") {
-        hsl.l += (hsl.l * amount) / 100;
+        hsl.l += hsl.l * amount;
     } else {
-        hsl.l += amount / 100;
+        hsl.l += amount;
     }
-    hsl.l = clamp(hsl.l);
+    hsl.l = clamp(hsl.l / 100) * 100;
     return hslToHex(hsl);
 };
 
@@ -49,11 +49,11 @@ export const darken = (
     const hsl = hexToHsl(hex);
 
     if (typeof method !== "undefined") {
-        hsl.l -= (hsl.l * amount) / 100;
+        hsl.l -= hsl.l * amount;
     } else {
-        hsl.l -= amount / 100;
+        hsl.l -= amount;
     }
-    hsl.l = clamp(hsl.l);
+    hsl.l = clamp(hsl.l / 100) * 100;
     return hslToHex(hsl);
 };
 
