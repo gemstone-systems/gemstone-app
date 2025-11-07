@@ -12,7 +12,15 @@ export const getUserLattices = async ({
 }: {
     pdsEndpoint: string;
     did: Did;
-}): Promise<Result<Array<SystemsGmstnDevelopmentLattice>, unknown>> => {
+}): Promise<
+    Result<
+        Array<{
+            uri: string;
+            value: SystemsGmstnDevelopmentLattice;
+        }>,
+        unknown
+    >
+> => {
     const handler = simpleFetchHandler({ service: pdsEndpoint });
     const client = new Client({ handler });
     const shardRecordsResult = await fetchRecords({
@@ -30,8 +38,19 @@ const fetchRecords = async ({
 }: {
     client: Client;
     did: Did;
-}): Promise<Result<Array<SystemsGmstnDevelopmentLattice>, unknown>> => {
-    const allRecords: Array<SystemsGmstnDevelopmentLattice> = [];
+}): Promise<
+    Result<
+        Array<{
+            uri: string;
+            value: SystemsGmstnDevelopmentLattice;
+        }>,
+        unknown
+    >
+> => {
+    const allRecords: Array<{
+        uri: string;
+        value: SystemsGmstnDevelopmentLattice;
+    }> = [];
     let cursor: string | undefined;
 
     let continueLoop = true;
@@ -68,7 +87,11 @@ const fetchRecords = async ({
 
         if (!success) return { ok: false, error: z.treeifyError(error) };
 
-        allRecords.push(...responses.map((data) => data.value));
+        allRecords.push(
+            ...responses.map((data) => {
+                return { uri: data.uri, value: data.value };
+            }),
+        );
 
         if (records.length < 100) continueLoop = false;
         cursor = nextCursor;

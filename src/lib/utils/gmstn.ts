@@ -60,3 +60,42 @@ export const registerNewShard = async ({
 
     return { ok: true };
 };
+export const registerNewLattice = async ({
+    latticeDomain: latticeDomain,
+    agent,
+}: {
+    latticeDomain: string;
+    agent: Agent;
+}): Promise<Result<undefined, string>> => {
+    if (!isDomain(latticeDomain))
+        return { ok: false, error: "Input was not a valid domain." };
+
+    const now = new Date().toISOString();
+
+    const record: Omit<SystemsGmstnDevelopmentShard, "$type"> = {
+        // @ts-expect-error we want to explicitly use the ISO string variant
+        createdAt: now,
+        // TODO: actually figure out how to support the description
+        description: "A Gemstone Systems Lattice.",
+    };
+    console.log(record);
+
+    const { success } = await agent.call(
+        "com.atproto.repo.createRecord",
+        {},
+        {
+            repo: agent.did,
+            collection: "systems.gmstn.development.lattice",
+            rkey: latticeDomain,
+            record,
+        },
+    );
+
+    if (!success)
+        return {
+            ok: false,
+            error: "Attempted to create lattice record failed. Check the domain inputs.",
+        };
+
+    return { ok: true };
+};
