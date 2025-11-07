@@ -80,8 +80,8 @@ export const LatticeSettings = () => {
                             marginLeft: 8,
                         }}
                     >
-                        {lattices.map((shard, idx) => (
-                            <LatticeInfo key={idx} shard={shard} />
+                        {lattices.map((lattice, idx) => (
+                            <LatticeInfo key={idx} lattice={lattice} />
                         ))}
                     </View>
                 </View>
@@ -170,19 +170,19 @@ export const LatticeSettings = () => {
 };
 
 const latticeQueryFn = async (session: OAuthSession) => {
-    const shards = await getUserLattices({
+    const lattices = await getUserLattices({
         pdsEndpoint: session.serverMetadata.issuer,
         did: session.did,
     });
 
-    if (!shards.ok) {
-        console.error("shardQueryFn error.", shards.error);
+    if (!lattices.ok) {
+        console.error("shardQueryFn error.", lattices.error);
         throw new Error(
             `Something went wrong while getting the user's membership records.}`,
         );
     }
 
-    const results = shards.data
+    const results = lattices.data
         .map((record) => {
             const convertResult = stringToAtUri(record.uri);
             if (!convertResult.ok) {

@@ -9,9 +9,9 @@ import { BadgeCheck, X } from "lucide-react-native";
 import { View } from "react-native";
 
 export const LatticeInfo = ({
-    shard,
+    lattice: shard,
 }: {
-    shard: {
+    lattice: {
         uri: Required<AtUri>;
         value: SystemsGmstnDevelopmentLattice;
     };
