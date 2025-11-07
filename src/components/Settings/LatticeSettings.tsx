@@ -101,7 +101,7 @@ export const LatticeSettings = () => {
 
                                 gap: 4,
                                 backgroundColor: hovered
-                                    ? lighten(semantic.primary, 5)
+                                    ? lighten(semantic.primary, 7)
                                     : semantic.primary,
                                 alignSelf: "flex-start",
                                 padding: 8,
