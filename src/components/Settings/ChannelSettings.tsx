@@ -9,7 +9,7 @@ import { useCurrentPalette } from "@/providers/ThemeProvider";
 import { getChannelRecordsFromPds } from "@/queries/get-channels-from-pds";
 import type { OAuthSession } from "@atproto/oauth-client";
 import { useQuery } from "@tanstack/react-query";
-import { Gem, MessagesSquare } from "lucide-react-native";
+import { MessagesSquare } from "lucide-react-native";
 import { View } from "react-native";
 
 export const ChannelSettings = () => {
@@ -57,29 +57,15 @@ export const ChannelSettings = () => {
                 </Text>
             </View>
             {channels && channels.length > 0 && (
-                <View style={{ marginLeft: 10, gap: 8 }}>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 4,
-                        }}
-                    >
-                        <Gem height={16} width={16} color={semantic.text} />
-                        <Text style={[typography.weights.byName.normal]}>
-                            Your Shards
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            gap: 4,
-                            marginLeft: 8,
-                        }}
-                    >
-                        {channels.map((channel, idx) => (
-                            <ChannelInfo key={idx} channel={channel} />
-                        ))}
-                    </View>
+                <View
+                    style={{
+                        gap: 4,
+                        marginLeft: 8,
+                    }}
+                >
+                    {channels.map((channel, idx) => (
+                        <ChannelInfo key={idx} channel={channel} />
+                    ))}
                 </View>
             )}
         </View>
@@ -87,19 +73,19 @@ export const ChannelSettings = () => {
 };
 
 const channelsQueryFn = async (session: OAuthSession) => {
-    const lattices = await getChannelRecordsFromPds({
+    const channels = await getChannelRecordsFromPds({
         pdsEndpoint: session.serverMetadata.issuer,
         did: session.did,
     });
 
-    if (!lattices.ok) {
-        console.error("latticeQueryFn error.", lattices.error);
+    if (!channels.ok) {
+        console.error("channelsQueryFn error.", channels.error);
         throw new Error(
             `Something went wrong while getting the user's channel records.}`,
         );
     }
 
-    const results = lattices.data
+    const results = channels.data
         .map((record) => {
             const convertResult = stringToAtUri(record.uri);
             if (!convertResult.ok) {
@@ -123,7 +109,7 @@ const channelsQueryFn = async (session: OAuthSession) => {
                 collection: convertResult.data.collection,
                 rKey: convertResult.data.rKey,
             };
-            return { uri, value: record.value };
+            return { cid: record.cid, uri, value: record.value };
         })
         .filter((atUri) => atUri !== undefined);
 
