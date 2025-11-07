@@ -9,7 +9,7 @@ import { useProfile } from "@/providers/authed/ProfileProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
 import { ArrowUp, Dot, Hash } from "lucide-react-native";
 import { useState } from "react";
-import { View, TextInput, TouchableOpacity, FlatList } from "react-native";
+import { View, TextInput, FlatList, Pressable } from "react-native";
 
 export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
     const [inputText, setInputText] = useState("");
@@ -182,7 +182,7 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
                     // eslint-disable-next-line @typescript-eslint/no-deprecated -- can't get it working with the new prop.
                     blurOnSubmit={false}
                 />
-                <TouchableOpacity
+                <Pressable
                     style={{
                         backgroundColor: inputText.trim()
                             ? semantic.primary
@@ -197,7 +197,7 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
                     disabled={!isConnected}
                 >
                     <ArrowUp height={20} width={20} />
-                </TouchableOpacity>
+                </Pressable>
             </View>
         </View>
     );
