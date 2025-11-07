@@ -14,7 +14,15 @@ export const getChannelRecordsFromPds = async ({
 }: {
     pdsEndpoint: string;
     did: Did;
-}): Promise<Result<Array<SystemsGmstnDevelopmentChannel>, unknown>> => {
+}): Promise<
+    Result<
+        Array<{
+            uri: string;
+            value: SystemsGmstnDevelopmentChannel;
+        }>,
+        unknown
+    >
+> => {
     const handler = simpleFetchHandler({ service: pdsEndpoint });
     const client = new Client({ handler });
     const channelRecordsResult = await fetchRecords({
@@ -32,8 +40,19 @@ const fetchRecords = async ({
 }: {
     client: Client;
     did: Did;
-}): Promise<Result<Array<SystemsGmstnDevelopmentChannel>, unknown>> => {
-    const allRecords: Array<SystemsGmstnDevelopmentChannel> = [];
+}): Promise<
+    Result<
+        Array<{
+            uri: string;
+            value: SystemsGmstnDevelopmentChannel;
+        }>,
+        unknown
+    >
+> => {
+    const allRecords: Array<{
+        uri: string;
+        value: SystemsGmstnDevelopmentChannel;
+    }> = [];
     let cursor: string | undefined;
 
     let continueLoop = true;
@@ -54,13 +73,27 @@ const fetchRecords = async ({
             };
         const { records, cursor: nextCursor } = results.data;
 
-        const { success, error, data } = z
-            .array(systemsGmstnDevelopmentChannelRecordSchema)
+        const {
+            success,
+            error,
+            data: responses,
+        } = z
+            .array(
+                z.object({
+                    cid: z.string(),
+                    uri: z.string(),
+                    value: systemsGmstnDevelopmentChannelRecordSchema,
+                }),
+            )
             .safeParse(records);
 
         if (!success) return { ok: false, error: z.treeifyError(error) };
 
-        allRecords.push(...data);
+        allRecords.push(
+            ...responses.map((data) => {
+                return { uri: data.uri, value: data.value };
+            }),
+        );
 
         if (records.length < 100) continueLoop = false;
         cursor = nextCursor;

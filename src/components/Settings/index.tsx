@@ -1,3 +1,4 @@
+import { ChannelSettings } from "@/components/Settings/ChannelSettings";
 import { LatticeSettings } from "@/components/Settings/LatticeSettings";
 import { ShardSettings } from "@/components/Settings/ShardSettings";
 import { View } from "react-native";
@@ -13,6 +14,7 @@ export const Settings = () => {
                 alignItems: "center",
             }}
         >
+            <ChannelSettings />
             <ShardSettings />
             <LatticeSettings />
         </View>
