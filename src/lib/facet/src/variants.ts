@@ -90,6 +90,7 @@ const DEFAULT_DARK_MODE: FacetPalette = {
         textSecondary: DEFAULT_DARK_PALETTE.subtext1,
         textTertiary: DEFAULT_DARK_PALETTE.subtext0,
         textInverse: DEFAULT_DARK_PALETTE.crust,
+        textPlaceholder: DEFAULT_DARK_PALETTE.overlay1,
         positive: DEFAULT_DARK_PALETTE.emerald,
         negative: DEFAULT_DARK_PALETTE.ruby,
         success: DEFAULT_DARK_PALETTE.emerald,

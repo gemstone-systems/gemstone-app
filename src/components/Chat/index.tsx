@@ -177,7 +177,7 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
                     value={inputText}
                     onChangeText={setInputText}
                     placeholder={`Message #${record.channel.name}`}
-                    placeholderTextColor={semantic.border}
+                    placeholderTextColor={semantic.textPlaceholder}
                     onSubmitEditing={handleSend}
                     // eslint-disable-next-line @typescript-eslint/no-deprecated -- can't get it working with the new prop.
                     blurOnSubmit={false}

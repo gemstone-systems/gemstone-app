@@ -25,6 +25,7 @@ export interface FacetPaletteSemantics {
     textSecondary: HexCode;
     textTertiary: HexCode;
     textInverse: HexCode;
+    textPlaceholder: HexCode;
 
     positive: HexCode;
     positiveLight?: HexCode;
