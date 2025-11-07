@@ -1,5 +1,5 @@
 import type { Did, Nsid } from "@/lib/types/atproto";
-import type { OAuth } from "@/providers/OAuthProvider";
+import type { OAuthContextValue } from "@/providers/OAuthProvider";
 
 /**
  * Requests an {@link https://atproto.com/specs/xrpc#inter-service-authentication-jwt|Inter Service JWT} from the PDS of the currently logged in user.
@@ -16,7 +16,7 @@ export const requestInterServiceJwtFromPds = async ({
     exp,
     lxm,
 }: {
-    oauth: OAuth;
+    oauth: OAuthContextValue;
     aud: Did;
     exp?: number;
     lxm?: Nsid;

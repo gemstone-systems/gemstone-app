@@ -8,7 +8,7 @@ import type { SystemsGmstnDevelopmentChannelMembership } from "@/lib/types/lexic
 import { getLatticeEndpointFromDid } from "@/lib/utils/gmstn";
 import { requestInterServiceJwtFromPds } from "@/lib/utils/jwt";
 import type { Result } from "@/lib/utils/result";
-import type { OAuth } from "@/providers/OAuthProvider";
+import type { OAuthContextValue } from "@/providers/OAuthProvider";
 import { z } from "zod";
 
 export const initiateHandshakeTo = async ({
@@ -18,7 +18,7 @@ export const initiateHandshakeTo = async ({
 }: {
     did: Did;
     memberships: Array<SystemsGmstnDevelopmentChannelMembership>;
-    oauth: OAuth;
+    oauth: OAuthContextValue;
 }): Promise<Result<LatticeSessionInfo, unknown>> => {
     const latticeUrlResult = await getLatticeEndpointFromDid(did);
     if (!latticeUrlResult.ok)
