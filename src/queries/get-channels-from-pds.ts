@@ -17,6 +17,7 @@ export const getChannelRecordsFromPds = async ({
 }): Promise<
     Result<
         Array<{
+            cid: string;
             uri: string;
             value: SystemsGmstnDevelopmentChannel;
         }>,
@@ -43,6 +44,7 @@ const fetchRecords = async ({
 }): Promise<
     Result<
         Array<{
+            cid: string;
             uri: string;
             value: SystemsGmstnDevelopmentChannel;
         }>,
@@ -50,6 +52,7 @@ const fetchRecords = async ({
     >
 > => {
     const allRecords: Array<{
+        cid: string;
         uri: string;
         value: SystemsGmstnDevelopmentChannel;
     }> = [];
@@ -91,7 +94,7 @@ const fetchRecords = async ({
 
         allRecords.push(
             ...responses.map((data) => {
-                return { uri: data.uri, value: data.value };
+                return data;
             }),
         );
 
