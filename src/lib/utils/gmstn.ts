@@ -1,9 +1,12 @@
-import type { Did } from "@/lib/types/atproto";
+import type { ComAtprotoRepoStrongRef, Did } from "@/lib/types/atproto";
 import type { SystemsGmstnDevelopmentShard } from "@/lib/types/lexicon/systems.gmstn.development.shard";
 import { getEndpointFromDid } from "@/lib/utils/atproto";
 import { isDomain } from "@/lib/utils/domains";
 import type { Result } from "@/lib/utils/result";
 import type { Agent } from "@atproto/api";
+import * as TID from "@atcute/tid";
+import type { SystemsGmstnDevelopmentLattice } from "@/lib/types/lexicon/systems.gmstn.development.lattice";
+import type { SystemsGmstnDevelopmentChannelInvite } from "@/lib/types/lexicon/systems.gmstn.development.channel.invite";
 
 export const getLatticeEndpointFromDid = async (did: Did) => {
     return await getEndpointFromDid(did, "GemstoneLattice");
@@ -88,6 +91,45 @@ export const registerNewLattice = async ({
             repo: agent.did,
             collection: "systems.gmstn.development.lattice",
             rkey: latticeDomain,
+            record,
+        },
+    );
+
+    if (!success)
+        return {
+            ok: false,
+            error: "Attempted to create lattice record failed. Check the domain inputs.",
+        };
+
+    return { ok: true };
+};
+
+export const inviteNewUser = async ({
+    did,
+    channel,
+    agent,
+}: {
+    did: Did;
+    channel: ComAtprotoRepoStrongRef;
+    agent: Agent;
+}): Promise<Result<undefined, string>> => {
+    const now = new Date();
+    const rkey = TID.create(now.getTime(), Math.random());
+
+    const record: Omit<SystemsGmstnDevelopmentChannelInvite, "$type"> = {
+        // @ts-expect-error we want to explicitly use the ISO string variant
+        createdAt: now.toISOString(),
+        recipient: did,
+        channel,
+    };
+
+    const { success } = await agent.call(
+        "com.atproto.repo.createRecord",
+        {},
+        {
+            repo: agent.did,
+            collection: "systems.gmstn.development.channel.invite",
+            rkey,
             record,
         },
     );
