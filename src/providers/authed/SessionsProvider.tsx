@@ -37,6 +37,7 @@ export const SessionsProvider = ({ children }: { children: ReactNode }) => {
         useHandshakes();
     const handshakes = handshakesMap.entries().toArray();
 
+    // TODO: move this to own query hook
     const endpointQueries = useQueries({
         queries: handshakes.map((handshake) => ({
             enabled: !handshakesInitialising,
@@ -47,8 +48,6 @@ export const SessionsProvider = ({ children }: { children: ReactNode }) => {
             staleTime: DEFAULT_STALE_TIME,
         })),
     });
-
-    console.log(endpointQueries);
 
     const isInitialising =
         handshakesInitialising || endpointQueries.some((q) => q.isLoading);

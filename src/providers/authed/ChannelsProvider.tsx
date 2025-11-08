@@ -63,15 +63,18 @@ export const ChannelsProvider = ({ children }: { children: ReactNode }) => {
     const { memberships, isInitialising: membershipsInitialising } =
         useMemberships();
 
-    // TODO: group channel memberships by
-
+    // TODO: group channel memberships by lattices
+    // TODO: move this to own query hook
     const channelsQueries = useQueries({
-        queries: memberships.map((membershipObjects) => ({
-            enabled: !membershipsInitialising,
-            queryKey: ["channel", membershipObjects.membership.channel.uri],
-            queryFn: () => channelQueryFn(membershipObjects.channelAtUri),
-            staleTime: DEFAULT_STALE_TIME,
-        })),
+        queries: memberships.map((membershipObjects) => {
+
+            return {
+                enabled: !membershipsInitialising,
+                queryKey: ["channel", membershipObjects.membership.channel.uri],
+                queryFn: () => channelQueryFn(membershipObjects.channelAtUri),
+                staleTime: DEFAULT_STALE_TIME,
+            };
+        }),
     });
 
     const isInitialising = channelsQueries.some((q) => q.isLoading);

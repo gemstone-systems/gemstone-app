@@ -94,6 +94,7 @@ export const MembershipsProvider = ({ children }: { children: ReactNode }) => {
     const { session, isLoading, agent } = oauth;
     const isOAuthReady = !isLoading && !!agent && !!session;
 
+    // TODO: move this to own query hook
     const membershipsQuery = useQuery({
         queryKey: ["membership", session?.did],
         enabled: isOAuthReady,

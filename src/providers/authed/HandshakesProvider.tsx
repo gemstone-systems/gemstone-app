@@ -64,20 +64,35 @@ const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
     } = oauth;
     const isOAuthReady = !isOauthLoading && !!oAuthAgent && !!oAuthSession;
 
+    const channelsMap = new Map<string, typeof channels>();
+    channels.forEach((channelData) => {
+        const key = channelData.channel.routeThrough.cid;
+
+        const existingGroup = channelsMap.get(key) ?? [];
+
+        existingGroup.push(channelData);
+
+        channelsMap.set(key, existingGroup);
+    });
+
+    // TODO: move this to own query hook
     const handshakeQueries = useQueries({
-        queries: channels.map((channelObj) => ({
-            enabled: !channelsInitialising && !membershipsInitialising,
-            queryKey: ["handshakes", channelObj.channel.name],
-            queryFn: () =>
-                handshakesQueryFn({
-                    channel: channelObj.channel,
-                    memberships: memberships.map(
-                        ({ membership }) => membership,
-                    ),
-                    oauth,
-                }),
-            staleTime: Infinity,
-        })),
+        queries: channelsMap
+            .values()
+            .map((channelObjs) => ({
+                enabled: !channelsInitialising && !membershipsInitialising,
+                queryKey: ["handshakes", channelObjs[0].channel.name],
+                queryFn: () =>
+                    handshakesQueryFn({
+                        channel: channelObjs[0].channel,
+                        memberships: memberships.map(
+                            ({ membership }) => membership,
+                        ),
+                        oauth,
+                    }),
+                staleTime: Infinity,
+            }))
+            .toArray(),
     });
 
     const isInitialising =
