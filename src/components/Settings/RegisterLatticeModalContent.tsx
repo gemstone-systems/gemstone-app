@@ -1,6 +1,7 @@
 import { Loading } from "@/components/primitives/Loading";
 import { Text } from "@/components/primitives/Text";
 import { useFacet } from "@/lib/facet";
+import { lighten } from "@/lib/facet/src/lib/colors";
 import { registerNewLattice } from "@/lib/utils/gmstn";
 import {
     useOAuthAgentGuaranteed,
@@ -97,32 +98,39 @@ export const RegisterLatticeModalContent = ({
                 />
             </View>
             <Pressable
-                style={{
-                    backgroundColor: inputText.trim()
-                        ? semantic.primary
-                        : registerError
-                          ? semantic.error
-                          : semantic.border,
-                    borderRadius: atoms.radii.lg,
-                    alignItems: "center",
-                    paddingVertical: 10,
-                }}
                 onPress={() => {
                     newLatticeMutation();
                 }}
             >
-                {mutationPending ? (
-                    <Loading size="small" />
-                ) : (
-                    <Text
-                        style={[
-                            typography.weights.byName.normal,
-                            { color: semantic.textInverse },
-                        ]}
-                    >
-                        Register
-                    </Text>
-                )}
+                {({ hovered }) =>
+                    mutationPending ? (
+                        <Loading size="small" />
+                    ) : (
+                        <View
+                            style={{
+                                backgroundColor: inputText.trim()
+                                    ? hovered
+                                        ? lighten(semantic.primary, 7)
+                                        : semantic.primary
+                                    : registerError
+                                      ? semantic.error
+                                      : semantic.border,
+                                borderRadius: atoms.radii.lg,
+                                alignItems: "center",
+                                paddingVertical: 10,
+                            }}
+                        >
+                            <Text
+                                style={[
+                                    typography.weights.byName.normal,
+                                    { color: semantic.textInverse },
+                                ]}
+                            >
+                                Add
+                            </Text>
+                        </View>
+                    )
+                }
             </Pressable>
         </View>
     );
