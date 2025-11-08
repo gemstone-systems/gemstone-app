@@ -3,8 +3,7 @@ import { Text } from "@/components/primitives/Text";
 import type { AtUri } from "@/lib/types/atproto";
 import type { SystemsGmstnDevelopmentLattice } from "@/lib/types/lexicon/systems.gmstn.development.lattice";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
-import { getOwnerInfoFromLattice } from "@/queries/get-owner-info-from-lattice";
-import { useQuery } from "@tanstack/react-query";
+import { useLatticeInfoQuery } from "@/queries/hooks/useLatticeInfoQuery";
 import { BadgeCheck, X } from "lucide-react-native";
 import { View } from "react-native";
 
@@ -17,13 +16,8 @@ export const LatticeInfo = ({
     };
 }) => {
     const latticeDomain = lattice.uri.rKey;
-    const { isLoading, data: latticeInfo } = useQuery({
-        queryKey: ["shardInfo", latticeDomain],
-        queryFn: async () => {
-            return await getOwnerInfoFromLattice(latticeDomain);
-        },
-        retry: 1,
-    });
+    const { useQuery } = useLatticeInfoQuery(latticeDomain);
+    const { isLoading, data: latticeInfo } = useQuery();
     const { semantic } = useCurrentPalette();
 
     return (

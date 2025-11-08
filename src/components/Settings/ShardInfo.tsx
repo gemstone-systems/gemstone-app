@@ -3,8 +3,7 @@ import { Text } from "@/components/primitives/Text";
 import type { AtUri } from "@/lib/types/atproto";
 import type { SystemsGmstnDevelopmentShard } from "@/lib/types/lexicon/systems.gmstn.development.shard";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
-import { getOwnerInfoFromShard } from "@/queries/get-owner-info-from-shard";
-import { useQuery } from "@tanstack/react-query";
+import { useShardInfoQuery } from "@/queries/hooks/useShardInfoQuery";
 import { BadgeCheck, X } from "lucide-react-native";
 import { View } from "react-native";
 
@@ -17,13 +16,8 @@ export const ShardInfo = ({
     };
 }) => {
     const shardDomain = shard.uri.rKey;
-    const { isLoading, data: shardInfo } = useQuery({
-        queryKey: ["shardInfo", shardDomain],
-        queryFn: async () => {
-            return await getOwnerInfoFromShard(shardDomain);
-        },
-        retry: 1,
-    });
+    const { useQuery } = useShardInfoQuery(shardDomain);
+    const { isLoading, data: shardInfo } = useQuery();
     const { semantic } = useCurrentPalette();
 
     return (
