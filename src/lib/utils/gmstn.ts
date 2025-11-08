@@ -148,7 +148,6 @@ export const addChannel = async ({
     channelInfo,
     agent,
 }: {
-    did: Did;
     channelInfo: Omit<SystemsGmstnDevelopmentChannel, "$type" | "createdAt">;
     agent: Agent;
 }): Promise<Result<undefined, string>> => {
