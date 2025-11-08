@@ -43,7 +43,7 @@ export const getInvitesFromConstellation = async (
                 rkey: z.string(),
             }),
         )
-        .safeParse(backlinksResult.data);
+        .safeParse(backlinksResult.data.records);
 
     if (!success) return { ok: false, error };
 
