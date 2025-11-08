@@ -153,7 +153,7 @@ export const addChannel = async ({
     agent: Agent;
 }): Promise<Result<undefined, string>> => {
     const now = new Date();
-    const rkey = TID.create(now.getTime(), Math.floor(Math.random() * 1023));
+    const rkey = TID.create(now.getTime() * 1_000, Math.floor(Math.random() * 1023));
 
     const record: Omit<SystemsGmstnDevelopmentChannel, "$type"> = {
         // @ts-expect-error we want to explicitly use the ISO string variant
@@ -192,7 +192,7 @@ export const addMembership = async ({
     agent: Agent;
 }): Promise<Result<undefined, string>> => {
     const now = new Date();
-    const rkey = TID.create(now.getTime(), Math.floor(Math.random() * 1023));
+    const rkey = TID.create(now.getTime() * 1_000, Math.floor(Math.random() * 1023));
 
     const record: Omit<SystemsGmstnDevelopmentChannelMembership, "$type"> = {
         // @ts-expect-error we want to explicitly use the ISO string variant
