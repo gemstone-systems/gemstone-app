@@ -58,7 +58,7 @@ export const registerNewShard = async ({
     if (!success)
         return {
             ok: false,
-            error: "Attempted to create shard record failed. Check the domain inputs.",
+            error: "Attempt to create shard record failed. Check the domain inputs.",
         };
 
     return { ok: true };
@@ -98,7 +98,7 @@ export const registerNewLattice = async ({
     if (!success)
         return {
             ok: false,
-            error: "Attempted to create lattice record failed. Check the domain inputs.",
+            error: "Attempt to create lattice record failed. Check the domain inputs.",
         };
 
     return { ok: true };
@@ -137,7 +137,7 @@ export const inviteNewUser = async ({
     if (!success)
         return {
             ok: false,
-            error: "Attempted to create lattice record failed. Check the domain inputs.",
+            error: "Attempt to create invite record failed. Check the did and strongRef inputs.",
         };
 
     return { ok: true };
