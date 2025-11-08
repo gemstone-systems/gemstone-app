@@ -7,6 +7,7 @@ import type { Agent } from "@atproto/api";
 import * as TID from "@atcute/tid";
 import type { SystemsGmstnDevelopmentLattice } from "@/lib/types/lexicon/systems.gmstn.development.lattice";
 import type { SystemsGmstnDevelopmentChannelInvite } from "@/lib/types/lexicon/systems.gmstn.development.channel.invite";
+import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channel";
 
 export const getLatticeEndpointFromDid = async (did: Did) => {
     return await getEndpointFromDid(did, "GemstoneLattice");
@@ -138,6 +139,43 @@ export const inviteNewUser = async ({
         return {
             ok: false,
             error: "Attempt to create invite record failed. Check the did and strongRef inputs.",
+        };
+
+    return { ok: true };
+};
+
+export const addChannel = async ({
+    channelInfo,
+    agent,
+}: {
+    did: Did;
+    channelInfo: Omit<SystemsGmstnDevelopmentChannel, "$type" | "createdAt">;
+    agent: Agent;
+}): Promise<Result<undefined, string>> => {
+    const now = new Date();
+    const rkey = TID.create(now.getTime(), Math.random());
+
+    const record: Omit<SystemsGmstnDevelopmentChannel, "$type"> = {
+        // @ts-expect-error we want to explicitly use the ISO string variant
+        createdAt: now.toISOString(),
+        ...channelInfo,
+    };
+
+    const { success } = await agent.call(
+        "com.atproto.repo.createRecord",
+        {},
+        {
+            repo: agent.did,
+            collection: "systems.gmstn.development.channel",
+            rkey,
+            record,
+        },
+    );
+
+    if (!success)
+        return {
+            ok: false,
+            error: "Attempted to create channel record failed. Check the channel info inputs.",
         };
 
     return { ok: true };
