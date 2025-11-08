@@ -2,27 +2,22 @@ import { Loading } from "@/components/primitives/Loading";
 import { Text } from "@/components/primitives/Text";
 import { ChannelInfo } from "@/components/Settings/ChannelInfo";
 import { useFacet } from "@/lib/facet";
-import type { AtUri } from "@/lib/types/atproto";
-import { stringToAtUri } from "@/lib/utils/atproto";
+import { fade, lighten } from "@/lib/facet/src/lib/colors";
 import { useOAuthSessionGuaranteed } from "@/providers/OAuthProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
-import { getChannelRecordsFromPds } from "@/queries/get-channels-from-pds";
-import type { OAuthSession } from "@atproto/oauth-client";
-import { useQuery } from "@tanstack/react-query";
-import { MessagesSquare } from "lucide-react-native";
-import { View } from "react-native";
+import { useChannelsQuery } from "@/queries/hooks/useChannelsQuery";
+import { MessagesSquare, Plus } from "lucide-react-native";
+import { useState } from "react";
+import { Modal, Pressable, View } from "react-native";
 
 export const ChannelSettings = () => {
     const { atoms, typography } = useFacet();
     const { semantic } = useCurrentPalette();
     const session = useOAuthSessionGuaranteed();
+    const [showAddModal, setShowAddModal] = useState(false);
+    const { useQuery } = useChannelsQuery(session);
 
-    const { isLoading, data: channels } = useQuery({
-        queryKey: ["channels", session.did],
-        queryFn: async () => {
-            return await channelsQueryFn(session);
-        },
-    });
+    const { isLoading, data: channels } = useQuery();
 
     return isLoading ? (
         <Loading />
