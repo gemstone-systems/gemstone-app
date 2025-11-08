@@ -4,13 +4,9 @@ import { RegisterShardModalContent } from "@/components/Settings/RegisterShardMo
 import { ShardInfo } from "@/components/Settings/ShardInfo";
 import { useFacet } from "@/lib/facet";
 import { fade, lighten } from "@/lib/facet/src/lib/colors";
-import type { AtUri } from "@/lib/types/atproto";
-import { stringToAtUri } from "@/lib/utils/atproto";
 import { useOAuthSessionGuaranteed } from "@/providers/OAuthProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
-import { getUserShards } from "@/queries/get-shards-from-pds";
-import type { OAuthSession } from "@atproto/oauth-client";
-import { useQuery } from "@tanstack/react-query";
+import { useShardsQuery } from "@/queries/hooks/useShardsQuery";
 import { Gem, HardDrive, Plus } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, View } from "react-native";
@@ -20,13 +16,9 @@ export const ShardSettings = () => {
     const { atoms, typography } = useFacet();
     const session = useOAuthSessionGuaranteed();
     const [showRegisterModal, setShowRegisterModal] = useState(false);
+    const { useQuery } = useShardsQuery(session)
 
-    const { data: shards, isLoading } = useQuery({
-        queryKey: ["shard", session.did],
-        queryFn: async () => {
-            return await shardsQueryFn(session);
-        },
-    });
+    const { data: shards, isLoading } = useQuery()
 
     return isLoading ? (
         <Loading />
@@ -166,48 +158,4 @@ export const ShardSettings = () => {
             </View>
         </View>
     );
-};
-
-const shardsQueryFn = async (session: OAuthSession) => {
-    const shards = await getUserShards({
-        pdsEndpoint: session.serverMetadata.issuer,
-        did: session.did,
-    });
-
-    if (!shards.ok) {
-        console.error("shardQueryFn error.", shards.error);
-        throw new Error(
-            `Something went wrong while getting the user's shard records.}`,
-        );
-    }
-
-    const results = shards.data
-        .map((record) => {
-            const convertResult = stringToAtUri(record.uri);
-            if (!convertResult.ok) {
-                console.error(
-                    "Could not convert",
-                    record,
-                    "into at:// URI object.",
-                    convertResult.error,
-                );
-                return;
-            }
-            if (!convertResult.data.collection || !convertResult.data.rKey) {
-                console.error(
-                    record,
-                    "did not convert to a full at:// URI with collection and rkey.",
-                );
-                return;
-            }
-            const uri: Required<AtUri> = {
-                authority: convertResult.data.authority,
-                collection: convertResult.data.collection,
-                rKey: convertResult.data.rKey,
-            };
-            return { uri, value: record.value };
-        })
-        .filter((atUri) => atUri !== undefined);
-
-    return results;
 };

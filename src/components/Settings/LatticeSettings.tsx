@@ -4,13 +4,9 @@ import { LatticeInfo } from "@/components/Settings/LatticeInfo";
 import { RegisterLatticeModalContent } from "@/components/Settings/RegisterLatticeModalContent";
 import { useFacet } from "@/lib/facet";
 import { fade, lighten } from "@/lib/facet/src/lib/colors";
-import type { AtUri } from "@/lib/types/atproto";
-import { stringToAtUri } from "@/lib/utils/atproto";
 import { useOAuthSessionGuaranteed } from "@/providers/OAuthProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
-import { getUserLattices } from "@/queries/get-lattices-from-pds";
-import type { OAuthSession } from "@atproto/oauth-client";
-import { useQuery } from "@tanstack/react-query";
+import { useLatticesQuery } from "@/queries/hooks/useLatticesQuery";
 import { Gem, Plus, Waypoints } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, View } from "react-native";
@@ -20,13 +16,9 @@ export const LatticeSettings = () => {
     const { atoms, typography } = useFacet();
     const session = useOAuthSessionGuaranteed();
     const [showRegisterModal, setShowRegisterModal] = useState(false);
+    const { useQuery } = useLatticesQuery(session)
 
-    const { data: lattices, isLoading } = useQuery({
-        queryKey: ["lattice", session.did],
-        queryFn: async () => {
-            return await latticeQueryFn(session);
-        },
-    });
+    const { data: lattices, isLoading } = useQuery()
 
     return isLoading ? (
         <Loading />
@@ -166,48 +158,4 @@ export const LatticeSettings = () => {
             </View>
         </View>
     );
-};
-
-const latticeQueryFn = async (session: OAuthSession) => {
-    const lattices = await getUserLattices({
-        pdsEndpoint: session.serverMetadata.issuer,
-        did: session.did,
-    });
-
-    if (!lattices.ok) {
-        console.error("latticeQueryFn error.", lattices.error);
-        throw new Error(
-            `Something went wrong while getting the user's lattice records.}`,
-        );
-    }
-
-    const results = lattices.data
-        .map((record) => {
-            const convertResult = stringToAtUri(record.uri);
-            if (!convertResult.ok) {
-                console.error(
-                    "Could not convert",
-                    record,
-                    "into at:// URI object.",
-                    convertResult.error,
-                );
-                return;
-            }
-            if (!convertResult.data.collection || !convertResult.data.rKey) {
-                console.error(
-                    record,
-                    "did not convert to a full at:// URI with collection and rkey.",
-                );
-                return;
-            }
-            const uri: Required<AtUri> = {
-                authority: convertResult.data.authority,
-                collection: convertResult.data.collection,
-                rKey: convertResult.data.rKey,
-            };
-            return { uri, value: record.value };
-        })
-        .filter((atUri) => atUri !== undefined);
-
-    return results;
 };
