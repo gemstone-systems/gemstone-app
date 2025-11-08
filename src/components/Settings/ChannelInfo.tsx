@@ -2,9 +2,7 @@ import { Text } from "@/components/primitives/Text";
 import { InviteUserModalContent } from "@/components/Settings/InviteUserModalContent";
 import { useFacet } from "@/lib/facet";
 import { fade } from "@/lib/facet/src/lib/colors";
-import type { AtUri } from "@/lib/types/atproto";
 import type { SystemsGmstnDevelopmentChannel } from "@/lib/types/lexicon/systems.gmstn.development.channel";
-import { atUriToString } from "@/lib/utils/atproto";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
 import { Hash, UserRoundPlus } from "lucide-react-native";
 import { useState } from "react";
@@ -15,14 +13,13 @@ export const ChannelInfo = ({
 }: {
     channel: {
         value: SystemsGmstnDevelopmentChannel;
-        uri: Required<AtUri>;
+        uriStr: string;
         cid: string;
     };
 }) => {
     const { semantic } = useCurrentPalette();
     const { atoms } = useFacet();
     const [showInviteModal, setShowInviteModal] = useState(false);
-    const channelAtUri = atUriToString(channel.uri);
 
     return (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
@@ -80,7 +77,7 @@ export const ChannelInfo = ({
                     >
                         <InviteUserModalContent
                             setShowInviteModal={setShowInviteModal}
-                            channelAtUri={channelAtUri}
+                            channelAtUri={channel.uriStr}
                             channelCid={channel.cid}
                         />
                     </Pressable>

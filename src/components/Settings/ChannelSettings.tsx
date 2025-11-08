@@ -1,5 +1,6 @@
 import { Loading } from "@/components/primitives/Loading";
 import { Text } from "@/components/primitives/Text";
+import { AddChannelModalContent } from "@/components/Settings/AddChannelModalContent";
 import { ChannelInfo } from "@/components/Settings/ChannelInfo";
 import { useFacet } from "@/lib/facet";
 import { fade, lighten } from "@/lib/facet/src/lib/colors";
@@ -63,50 +64,84 @@ export const ChannelSettings = () => {
                     ))}
                 </View>
             )}
+            <View>
+                <Pressable
+                    style={{ alignSelf: "flex-start", marginLeft: 10 }}
+                    onPress={() => {
+                        setShowAddModal(true);
+                    }}
+                >
+                    {({ hovered }) => (
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+
+                                gap: 4,
+                                backgroundColor: hovered
+                                    ? lighten(semantic.primary, 7)
+                                    : semantic.primary,
+                                alignSelf: "flex-start",
+                                padding: 8,
+                                paddingRight: 12,
+                                borderRadius: atoms.radii.md,
+                            }}
+                        >
+                            <Plus
+                                height={16}
+                                width={16}
+                                color={semantic.textInverse}
+                            />
+                            <Text
+                                style={[
+                                    typography.weights.byName.normal,
+                                    { color: semantic.textInverse },
+                                ]}
+                            >
+                               Add 
+                            </Text>
+                        </View>
+                    )}
+                </Pressable>
+                <Modal
+                    visible={showAddModal}
+                    onRequestClose={() => {
+                        setShowAddModal(!showAddModal);
+                    }}
+                    animationType="fade"
+                    transparent={true}
+                >
+                    <Pressable
+                        style={{
+                            flex: 1,
+                            cursor: "auto",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: fade(
+                                semantic.backgroundDarker,
+                                60,
+                            ),
+                        }}
+                        onPress={() => {
+                            setShowAddModal(false);
+                        }}
+                    >
+                        <Pressable
+                            style={{
+                                alignSelf: "center",
+                                cursor: "auto",
+                            }}
+                            onPress={(e) => {
+                                e.stopPropagation();
+                            }}
+                        >
+                            <AddChannelModalContent
+                                setShowAddModal={setShowAddModal}
+                            />
+                        </Pressable>
+                    </Pressable>
+                </Modal>
+            </View>
         </View>
     );
-};
-
-const channelsQueryFn = async (session: OAuthSession) => {
-    const channels = await getChannelRecordsFromPds({
-        pdsEndpoint: session.serverMetadata.issuer,
-        did: session.did,
-    });
-
-    if (!channels.ok) {
-        console.error("channelsQueryFn error.", channels.error);
-        throw new Error(
-            `Something went wrong while getting the user's channel records.}`,
-        );
-    }
-
-    const results = channels.data
-        .map((record) => {
-            const convertResult = stringToAtUri(record.uri);
-            if (!convertResult.ok) {
-                console.error(
-                    "Could not convert",
-                    record,
-                    "into at:// URI object.",
-                    convertResult.error,
-                );
-                return;
-            }
-            if (!convertResult.data.collection || !convertResult.data.rKey) {
-                console.error(
-                    record,
-                    "did not convert to a full at:// URI with collection and rkey.",
-                );
-                return;
-            }
-            const uri: Required<AtUri> = {
-                authority: convertResult.data.authority,
-                collection: convertResult.data.collection,
-                rKey: convertResult.data.rKey,
-            };
-            return { cid: record.cid, uri, value: record.value };
-        })
-        .filter((atUri) => atUri !== undefined);
-
-    return results;
 };
