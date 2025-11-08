@@ -7,6 +7,7 @@ import {
     useOAuthSessionGuaranteed,
 } from "@/providers/OAuthProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
+import { useShardsQuery } from "@/queries/hooks/useShardsQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ export const RegisterShardModalContent = ({
     const agent = useOAuthAgentGuaranteed();
     const session = useOAuthSessionGuaranteed();
     const queryClient = useQueryClient();
+    const { queryKey: shardsQueryKey } = useShardsQuery(session)
     const { mutate: newShardMutation, isPending: mutationPending } =
         useMutation({
             mutationFn: async () => {
@@ -46,7 +48,7 @@ export const RegisterShardModalContent = ({
             },
             onSuccess: async () => {
                 await queryClient.invalidateQueries({
-                    queryKey: ["shard", session.did],
+                    queryKey: shardsQueryKey,
                 });
                 setShowRegisterModal(false);
             },

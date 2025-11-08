@@ -7,6 +7,7 @@ import {
     useOAuthSessionGuaranteed,
 } from "@/providers/OAuthProvider";
 import { useCurrentPalette } from "@/providers/ThemeProvider";
+import { useLatticesQuery } from "@/queries/hooks/useLatticesQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ export const RegisterLatticeModalContent = ({
     const agent = useOAuthAgentGuaranteed();
     const session = useOAuthSessionGuaranteed();
     const queryClient = useQueryClient();
+    const { queryKey: latticesQueryKey } = useLatticesQuery(session);
     const { mutate: newLatticeMutation, isPending: mutationPending } =
         useMutation({
             mutationFn: async () => {
@@ -46,7 +48,7 @@ export const RegisterLatticeModalContent = ({
             },
             onSuccess: async () => {
                 await queryClient.invalidateQueries({
-                    queryKey: ["lattice", session.did],
+                    queryKey: latticesQueryKey,
                 });
                 setShowRegisterModal(false);
             },
