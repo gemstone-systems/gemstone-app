@@ -7,7 +7,7 @@ import {
 import type { Result } from "@/lib/utils/result";
 import type { ZodError } from "zod";
 
-export const getConstellationBacklink = async ({
+export const getConstellationBacklinks = async ({
     subject,
     source,
 }: {
