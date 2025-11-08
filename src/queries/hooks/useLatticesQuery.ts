@@ -5,7 +5,7 @@ import type { OAuthSession } from "@atproto/oauth-client";
 import { useQuery } from "@tanstack/react-query";
 
 export const useLatticesQuery = (session: OAuthSession) => {
-    const queryKey = ["lattice", session.did];
+    const queryKey = ["lattices", session.did];
     return {
         queryKey,
         useQuery: () =>

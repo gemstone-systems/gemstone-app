@@ -5,7 +5,7 @@ import type { OAuthSession } from "@atproto/oauth-client";
 import { useQuery } from "@tanstack/react-query";
 
 export const useShardsQuery = (session: OAuthSession) => {
-    const queryKey = ["shard", session.did];
+    const queryKey = ["shards", session.did];
     return {
         queryKey,
         useQuery: () => useQuery({
