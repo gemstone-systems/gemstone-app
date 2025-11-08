@@ -19,3 +19,7 @@ export const __DEV__loopbackOAuthMetadata = {
 };
 
 export const DEFAULT_STALE_TIME = 5 * 60 * 1000;
+
+export const CONSTELLATION_URL = new URL(
+    "https://constellation.microcosm.blue/",
+);
