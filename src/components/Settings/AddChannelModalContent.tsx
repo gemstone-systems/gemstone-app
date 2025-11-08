@@ -3,6 +3,7 @@ import { Text } from "@/components/primitives/Text";
 import { useFacet } from "@/lib/facet";
 import { lighten } from "@/lib/facet/src/lib/colors";
 import type { ComAtprotoRepoStrongRef } from "@/lib/types/atproto";
+import { addChannel } from "@/lib/utils/gmstn";
 import {
     useOAuthAgentGuaranteed,
     useOAuthSessionGuaranteed,
@@ -40,40 +41,6 @@ export const AddChannelModalContent = ({
     const { data: lattices, isLoading: latticesLoading } =
         useLatticesQueryActual();
     const { data: shards, isLoading: shardsLoading } = useShardsQueryActual();
-
-    const { mutate: newChannelMutation, isPending: mutationPending } =
-        useMutation({
-            mutationFn: async () => {
-                // const registerResult = await registerNewChannel({
-                //     channelDomain: inputText,
-                //     agent,
-                // });
-                // if (!registerResult.ok) {
-                //     console.error(
-                //         "Something went wrong when registering the channel.",
-                //         registerResult.error,
-                //     );
-                //     throw new Error(
-                //         `Something went wrong when registering the channel. ${registerResult.error}`,
-                //     );
-                // }
-                // setShowAddModal(false);
-            },
-            onSuccess: async () => {
-                await queryClient.invalidateQueries({
-                    queryKey: channelsQueryKey,
-                });
-                setShowAddModal(false);
-            },
-            onError: (err) => {
-                console.error(
-                    "Something went wrong when registering the channel.",
-                    err,
-                );
-                setMutationError(err.message);
-            },
-        });
-
     const selectableShards = shards
         ? shards.map((shard) => ({
               domain: shard.uri.rKey,
@@ -100,12 +67,45 @@ export const AddChannelModalContent = ({
         Omit<ComAtprotoRepoStrongRef, "$type">
     >(selectableLattices[0].ref);
 
+    const { mutate: newChannelMutation, isPending: mutationPending } =
+        useMutation({
+            mutationFn: async () => {
+                const registerResult = await addChannel({
+                    channelInfo: {
+                        name,
+                        topic,
+                        storeAt: selectedShard,
+                        routeThrough: selectedLattice,
+                    },
+                    agent,
+                });
+                if (!registerResult.ok) {
+                    console.error(
+                        "Something went wrong when registering the channel.",
+                        registerResult.error,
+                    );
+                    throw new Error(
+                        `Something went wrong when registering the channel. ${registerResult.error}`,
+                    );
+                }
+                setShowAddModal(false);
+            },
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
+                    queryKey: channelsQueryKey,
+                });
+                setShowAddModal(false);
+            },
+            onError: (err) => {
+                console.error(
+                    "Something went wrong when registering the channel.",
+                    err,
+                );
+                setMutationError(err.message);
+            },
+        });
+
     const isLoading = latticesLoading && shardsLoading;
-    console.log({
-        selectedShard: JSON.stringify(selectedShard),
-        selectedLattice: JSON.stringify(selectedLattice),
-        name: name.trim(),
-    });
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- must explicitly check because we are deriving from an array.
     const readyToSubmit = !!(selectedShard && selectedLattice && name.trim());

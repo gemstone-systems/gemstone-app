@@ -98,7 +98,7 @@ export const ChannelSettings = () => {
                                     { color: semantic.textInverse },
                                 ]}
                             >
-                               Add 
+                                Add
                             </Text>
                         </View>
                     )}

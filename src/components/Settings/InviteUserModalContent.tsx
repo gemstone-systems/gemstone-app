@@ -61,7 +61,6 @@ export const InviteUserModalContent = ({
                         $type: "com.atproto.repo.strongRef",
                     },
                 });
-                console.log(inviteRes)
                 if (!inviteRes.ok) throw new Error(inviteRes.error);
             },
             onSuccess: async () => {
