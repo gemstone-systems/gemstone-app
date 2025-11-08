@@ -112,7 +112,7 @@ export const ShardSettings = () => {
                                     { color: semantic.textInverse },
                                 ]}
                             >
-                                Register a Shard
+                                Register
                             </Text>
                         </View>
                     )}

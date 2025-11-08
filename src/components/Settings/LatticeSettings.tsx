@@ -112,7 +112,7 @@ export const LatticeSettings = () => {
                                     { color: semantic.textInverse },
                                 ]}
                             >
-                                Register a Lattice
+                                Register
                             </Text>
                         </View>
                     )}
