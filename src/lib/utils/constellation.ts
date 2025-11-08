@@ -1,9 +1,6 @@
 import { CONSTELLATION_URL } from "@/lib/consts";
-import type {
-    ConstellationBacklinkResponse} from "@/lib/types/constellation";
-import {
-    constellationBacklinkResponseSchema,
-} from "@/lib/types/constellation";
+import type { ConstellationBacklinkResponse } from "@/lib/types/constellation";
+import { constellationBacklinkResponseSchema } from "@/lib/types/constellation";
 import type { Result } from "@/lib/utils/result";
 import type { ZodError } from "zod";
 
