@@ -16,6 +16,7 @@ import {
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { Platform, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const RootLayoutInner = () => {
     const [loaded, error] = useFonts({
@@ -71,9 +72,11 @@ const RootLayoutInner = () => {
 
 const RootLayout = () => {
     return (
-        <RootProviders>
-            <RootLayoutInner />
-        </RootProviders>
+        <GestureHandlerRootView>
+            <RootProviders>
+                <RootLayoutInner />
+            </RootProviders>
+        </GestureHandlerRootView>
     );
 };
 
