@@ -19,6 +19,8 @@ export const getInvitesFromConstellation = async (
         unknown
     >
 > => {
+    // FIXME: If there are too many records, we can't get them all
+    // because we aren't tracking the cursor and looping calls to get the backlinks
     const backlinksResult = await getConstellationBacklinks({
         subject: did,
         source: {
