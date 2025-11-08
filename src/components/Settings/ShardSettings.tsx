@@ -16,9 +16,9 @@ export const ShardSettings = () => {
     const { atoms, typography } = useFacet();
     const session = useOAuthSessionGuaranteed();
     const [showRegisterModal, setShowRegisterModal] = useState(false);
-    const { useQuery } = useShardsQuery(session)
+    const { useQuery } = useShardsQuery(session);
 
-    const { data: shards, isLoading } = useQuery()
+    const { data: shards, isLoading } = useQuery();
 
     return isLoading ? (
         <Loading />

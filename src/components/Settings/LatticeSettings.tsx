@@ -16,9 +16,9 @@ export const LatticeSettings = () => {
     const { atoms, typography } = useFacet();
     const session = useOAuthSessionGuaranteed();
     const [showRegisterModal, setShowRegisterModal] = useState(false);
-    const { useQuery } = useLatticesQuery(session)
+    const { useQuery } = useLatticesQuery(session);
 
-    const { data: lattices, isLoading } = useQuery()
+    const { data: lattices, isLoading } = useQuery();
 
     return isLoading ? (
         <Loading />
