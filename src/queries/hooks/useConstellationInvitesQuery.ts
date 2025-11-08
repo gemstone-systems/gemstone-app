@@ -2,6 +2,8 @@ import { getInvitesFromConstellation } from "@/queries/get-invites-from-constell
 import type { OAuthSession } from "@atproto/oauth-client";
 import { useQuery } from "@tanstack/react-query";
 
+// TODO: use prism instead, so that we can get the backlink, the invite, and the channel's actual record
+// and not just the strongRef.
 export const useConstellationInvitesQuery = (session: OAuthSession) => {
     const queryKey = ["invites", session.did];
     return {
