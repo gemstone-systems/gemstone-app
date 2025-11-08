@@ -10,17 +10,17 @@ export const useConstellationInvitesQuery = (session: OAuthSession) => {
             useQuery({
                 queryKey,
                 queryFn: async () => {
-                    return await invitesQueryFn(session);
+                    return await constellationInvitesQueryFn(session);
                 },
             }),
     };
 };
 
-const invitesQueryFn = async (session: OAuthSession) => {
+const constellationInvitesQueryFn = async (session: OAuthSession) => {
     const invites = await getInvitesFromConstellation(session.did);
 
     if (!invites.ok) {
-        console.error("invitesQueryFn error.", invites.error);
+        console.error("constellationInvitesQueryFn error.", invites.error);
         throw new Error(
             `Something went wrong while getting the user's invite records.}`,
         );
