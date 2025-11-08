@@ -24,21 +24,21 @@ export const initiateHandshakeTo = async ({
     if (!latticeUrlResult.ok)
         return { ok: false, error: latticeUrlResult.error };
 
-    let jwt = "";
-    if (did.startsWith("did:web:localhost")) {
-        if (__DEV__)
-            jwt = await requestInterServiceJwtFromPds({ oauth, aud: did });
-        else
-            return {
-                ok: false,
-                error: `Cannot initiate handshake to a lattice at localhost. Provided handshake target's DID was ${did}`,
-            };
-    } else {
-        // do proxy
-        // for now we return error
-        // FIXME: actually do service proxying.
-        return { ok: false, error: "Service proxying not yet implemented" };
-    }
+    // FIXME: actually do service proxying.
+    const jwt = await requestInterServiceJwtFromPds({ oauth, aud: did });
+    // if (did.startsWith("did:web:localhost")) {
+    //     if (__DEV__)
+    //         jwt = await requestInterServiceJwtFromPds({ oauth, aud: did });
+    //     else
+    //         return {
+    //             ok: false,
+    //             error: `Cannot initiate handshake to a lattice at localhost. Provided handshake target's DID was ${did}`,
+    //         };
+    // } else {
+    //     // do proxy
+    //     // for now we return error
+    //     return { ok: false, error: "Service proxying not yet implemented" };
+    // }
 
     const latticeBaseUrl = latticeUrlResult.data.origin;
 
