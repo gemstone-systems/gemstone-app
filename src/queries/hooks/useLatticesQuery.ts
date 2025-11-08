@@ -55,7 +55,12 @@ const latticeQueryFn = async (session: OAuthSession) => {
                 collection: convertResult.data.collection,
                 rKey: convertResult.data.rKey,
             };
-            return { cid: record.cid, uri, value: record.value };
+            return {
+                cid: record.cid,
+                uriStr: record.uri,
+                uri,
+                value: record.value,
+            };
         })
         .filter((atUri) => atUri !== undefined);
 

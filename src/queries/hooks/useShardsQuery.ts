@@ -8,12 +8,13 @@ export const useShardsQuery = (session: OAuthSession) => {
     const queryKey = ["shards", session.did];
     return {
         queryKey,
-        useQuery: () => useQuery({
-            queryKey: queryKey,
-            queryFn: async () => {
-                return await shardsQueryFn(session);
-            },
-        }),
+        useQuery: () =>
+            useQuery({
+                queryKey: queryKey,
+                queryFn: async () => {
+                    return await shardsQueryFn(session);
+                },
+            }),
     };
 };
 
@@ -54,7 +55,12 @@ const shardsQueryFn = async (session: OAuthSession) => {
                 collection: convertResult.data.collection,
                 rKey: convertResult.data.rKey,
             };
-            return { cid: record.cid, uri, value: record.value };
+            return {
+                cid: record.cid,
+                uriStr: record.uri,
+                uri,
+                value: record.value,
+            };
         })
         .filter((atUri) => atUri !== undefined);
 
