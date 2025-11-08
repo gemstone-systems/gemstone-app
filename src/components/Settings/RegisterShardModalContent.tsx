@@ -62,6 +62,8 @@ export const RegisterShardModalContent = ({
             },
         });
 
+    const readyToSubmit = !!inputText.trim();
+
     return (
         <View
             style={{
@@ -98,6 +100,7 @@ export const RegisterShardModalContent = ({
                 />
             </View>
             <Pressable
+                disabled={!readyToSubmit}
                 onPress={() => {
                     newShardMutation();
                 }}
@@ -108,13 +111,13 @@ export const RegisterShardModalContent = ({
                     ) : (
                         <View
                             style={{
-                                backgroundColor: inputText.trim()
+                                backgroundColor: readyToSubmit
                                     ? hovered
                                         ? lighten(semantic.primary, 7)
                                         : semantic.primary
                                     : registerError
                                       ? semantic.error
-                                      : semantic.border,
+                                      : semantic.textPlaceholder,
                                 borderRadius: atoms.radii.lg,
                                 alignItems: "center",
                                 paddingVertical: 10,

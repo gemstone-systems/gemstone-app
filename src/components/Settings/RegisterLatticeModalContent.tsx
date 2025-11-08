@@ -62,6 +62,8 @@ export const RegisterLatticeModalContent = ({
             },
         });
 
+    const readyToSubmit = !!inputText.trim();
+
     return (
         <View
             style={{
@@ -98,6 +100,7 @@ export const RegisterLatticeModalContent = ({
                 />
             </View>
             <Pressable
+                disabled={!readyToSubmit}
                 onPress={() => {
                     newLatticeMutation();
                 }}
@@ -108,13 +111,13 @@ export const RegisterLatticeModalContent = ({
                     ) : (
                         <View
                             style={{
-                                backgroundColor: inputText.trim()
+                                backgroundColor: readyToSubmit
                                     ? hovered
                                         ? lighten(semantic.primary, 7)
                                         : semantic.primary
                                     : registerError
                                       ? semantic.error
-                                      : semantic.border,
+                                      : semantic.textPlaceholder,
                                 borderRadius: atoms.radii.lg,
                                 alignItems: "center",
                                 paddingVertical: 10,
