@@ -29,6 +29,9 @@ export const ProfileModalContent = () => {
             <Link href="/profile" style={listItemStyles} asChild>
                 <LinkText label="Profile" />
             </Link>
+            <Link href="/invites" style={listItemStyles} asChild>
+                <LinkText label="Invites" />
+            </Link>
             <Link href="/settings" style={listItemStyles} asChild>
                 <LinkText label="Settings" />
             </Link>
