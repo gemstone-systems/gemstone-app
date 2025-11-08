@@ -54,7 +54,7 @@ const shardsQueryFn = async (session: OAuthSession) => {
                 collection: convertResult.data.collection,
                 rKey: convertResult.data.rKey,
             };
-            return { uri, value: record.value };
+            return { cid: record.cid, uri, value: record.value };
         })
         .filter((atUri) => atUri !== undefined);
 

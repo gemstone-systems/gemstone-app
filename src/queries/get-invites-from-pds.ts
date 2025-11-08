@@ -15,6 +15,7 @@ export const getInviteRecordsFromPds = async ({
 }): Promise<
     Result<
         Array<{
+            cid: string;
             uri: string;
             value: SystemsGmstnDevelopmentChannelInvite;
         }>,
@@ -41,6 +42,7 @@ const fetchRecords = async ({
 }): Promise<
     Result<
         Array<{
+            cid: string;
             uri: string;
             value: SystemsGmstnDevelopmentChannelInvite;
         }>,
@@ -48,6 +50,7 @@ const fetchRecords = async ({
     >
 > => {
     const allRecords: Array<{
+        cid: string;
         uri: string;
         value: SystemsGmstnDevelopmentChannelInvite;
     }> = [];
@@ -86,11 +89,7 @@ const fetchRecords = async ({
             .safeParse(records);
         if (!success) return { ok: false, error: z.treeifyError(error) };
 
-        allRecords.push(
-            ...responses.map((data) => {
-                return { uri: data.uri, value: data.value };
-            }),
-        );
+        allRecords.push(...responses);
 
         if (records.length < 100) continueLoop = false;
         cursor = nextCursor;
