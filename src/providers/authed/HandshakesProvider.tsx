@@ -75,6 +75,20 @@ const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
         channelsMap.set(key, existingGroup);
     });
 
+    const membershipsMap = new Map<
+        AtUri,
+        SystemsGmstnDevelopmentChannelMembership
+    >();
+    channels.forEach((channelData) => {
+        const membership = memberships.find(
+            (membershipData) =>
+                membershipData.channelAtUri.rKey ===
+                channelData.channelAtUri.rKey,
+        );
+        if (!membership) return;
+        membershipsMap.set(channelData.channelAtUri, membership.membership);
+    });
+
     // TODO: move this to own query hook
     const handshakeQueries = useQueries({
         queries: channelsMap
@@ -85,9 +99,11 @@ const HandshakesProviderInner = ({ children }: { children: ReactNode }) => {
                 queryFn: () =>
                     handshakesQueryFn({
                         channel: channelObjs[0].channel,
-                        memberships: memberships.map(
-                            ({ membership }) => membership,
-                        ),
+                        memberships: channelObjs
+                            .map((channelObj) =>
+                                membershipsMap.get(channelObj.channelAtUri),
+                            )
+                            .filter((val) => val !== undefined),
                         oauth,
                     }),
                 staleTime: Infinity,
