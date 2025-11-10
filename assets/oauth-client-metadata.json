@@ -3,7 +3,7 @@
     "client_name": "Gemstone",
     "client_uri": "https://app.gmstn.systems",
     "redirect_uris": [
-        "systems.gmstn.app:/oauth/callback"
+        "systems.gmstn.app:/login/"
     ],
     "scope": "atproto transition:generic",
     "token_endpoint_auth_method": "none",
