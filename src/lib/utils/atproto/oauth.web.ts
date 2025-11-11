@@ -6,7 +6,7 @@ import type {
 } from "@atproto/oauth-client-browser";
 import type { ExpoOAuthClientOptions } from "@atproto/oauth-client-expo";
 import { ExpoOAuthClient as PbcWebExpoOAuthClient } from "@atproto/oauth-client-expo";
-import oAuthMetadata from "../../../../assets/oauth-client-metadata.json";
+import oAuthMetadata from "../../../../public/oauth-client-metadata.json";
 import { __DEV__loopbackOAuthMetadata } from "@/lib/consts";
 
 // suuuuuch a hack holy shit
