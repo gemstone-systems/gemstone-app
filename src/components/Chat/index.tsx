@@ -13,11 +13,15 @@ import { View, TextInput, FlatList, Pressable } from "react-native";
 
 export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
     const [inputText, setInputText] = useState("");
-    const { messages, sendMessageToChannel, isConnected } =
-        useChannel(channelAtUri);
     const record = useChannelRecordByAtUriObject(channelAtUri);
     const { semantic } = useCurrentPalette();
     const { typography, atoms } = useFacet();
+    const channel = useChannel(channelAtUri);
+    const { isLoading } = useProfile();
+
+    if (!channel) return <></>;
+
+    const { messages, sendMessageToChannel, isConnected } = channel;
 
     const handleSend = () => {
         if (inputText.trim()) {
@@ -26,13 +30,11 @@ export const Chat = ({ channelAtUri }: { channelAtUri: AtUri }) => {
         }
     };
 
-    const { isLoading } = useProfile();
-
     if (!record)
         return (
             <View>
                 <Text>
-                    Something has gone wrong. Could not resolve channel record
+                    Something has gone wrong.Could not resolve channel record
                     from given at:// URI.
                 </Text>
             </View>

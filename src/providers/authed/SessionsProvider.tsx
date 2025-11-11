@@ -98,9 +98,7 @@ export const SessionsProvider = ({ children }: { children: ReactNode }) => {
 
             console.log("tried to find", channel);
             if (!sessionInfo)
-                throw new Error(
-                    "Provided channel at:// URI (object) could not be found in any existing lattice sessions",
-                );
+                return { sessionInfo: undefined, socket: undefined };
 
             return { sessionInfo, socket: sessionsMap.get(sessionInfo) };
         },

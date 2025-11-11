@@ -20,14 +20,18 @@ export const useChannel = (channel: AtUri) => {
     const { sessionInfo, socket } = findChannelSession(channel);
 
     useEffect(() => {
-        if (!sessionInfo)
-            throw new Error(
+        if (!sessionInfo) {
+            console.warn(
                 "Channel did not resolve to a valid sessionInfo object.",
             );
-        if (!socket)
-            throw new Error(
+            return;
+        }
+        if (!socket) {
+            console.warn(
                 "Session info did not resolve to a valid websocket connection. This should not happen and is likely a bug. Check the sessions map object.",
             );
+            return;
+        }
 
         // attach handlers here
 
@@ -117,15 +121,19 @@ export const useChannel = (channel: AtUri) => {
         };
     }, [socket, sessionInfo, channel]);
 
-    if (!oAuthSession) throw new Error("No OAuth session");
-    if (!sessionInfo)
-        throw new Error(
+    if (!oAuthSession) {console.warn("No OAuth session"); return }
+    if (!sessionInfo) {
+        console.warn(
             "Channel did not resolve to a valid sessionInfo object.",
         );
-    if (!socket)
-        throw new Error(
+        return;
+    }
+    if (!socket) {
+        console.warn(
             "Session info did not resolve to a valid websocket connection. This should not happen and is likely a bug. Check the sessions map object.",
         );
+        return;
+    }
 
     const channelStringified = atUriToString(channel);
 
