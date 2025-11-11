@@ -3,6 +3,7 @@
     "client_name": "Gemstone",
     "client_uri": "https://app.gmstn.systems",
     "redirect_uris": [
+        "https://app.gmstn.systems/",
         "systems.gmstn.app:/login/"
     ],
     "scope": "atproto transition:generic",
