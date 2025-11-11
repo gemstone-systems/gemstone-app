@@ -4,11 +4,7 @@ import { useFacet } from "@/lib/facet";
 import type { AtUri, DidPlc, DidWeb } from "@/lib/types/atproto";
 import { systemsGmstnDevelopmentChannelInviteRecordSchema } from "@/lib/types/lexicon/systems.gmstn.development.channel.invite";
 import { partition } from "@/lib/utils/arrays";
-import {
-    getCommitFromFullAtUri,
-    getRecordFromFullAtUri,
-    stringToAtUri,
-} from "@/lib/utils/atproto";
+import { getCommitFromFullAtUri, stringToAtUri } from "@/lib/utils/atproto";
 import { addMembership } from "@/lib/utils/gmstn";
 import { useMemberships } from "@/providers/authed/MembershipsProvider";
 import {
@@ -20,15 +16,14 @@ import { useConstellationInvitesQuery } from "@/queries/hooks/useConstellationIn
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, Mail, MailOpen, X } from "lucide-react-native";
 import { FlatList, Pressable, View } from "react-native";
-import z from "zod";
+import { z } from "zod";
 
 export const Invites = () => {
     const { semantic } = useCurrentPalette();
     const { atoms, typography } = useFacet();
     const { memberships } = useMemberships();
     const session = useOAuthSessionGuaranteed();
-    const { useQuery } =
-        useConstellationInvitesQuery(session);
+    const { useQuery } = useConstellationInvitesQuery(session);
 
     const { data: invites, isLoading } = useQuery();
 
@@ -50,7 +45,7 @@ export const Invites = () => {
             ),
     );
 
-    console.log({existingInvites, pendingInvites})
+    console.log({ existingInvites, pendingInvites });
 
     return (
         <View
@@ -171,8 +166,11 @@ const PendingInvite = ({ inviteAtUri }: { inviteAtUri: Required<AtUri> }) => {
     const { queryKey: constellationInvitesQueryKey } =
         useConstellationInvitesQuery(session);
     const queryClient = useQueryClient();
-    
-    const queryKeysToInvalidate = constellationInvitesQueryKey.concat(["membership", session.did])
+
+    const queryKeysToInvalidate = constellationInvitesQueryKey.concat([
+        "membership",
+        session.did,
+    ]);
 
     const { mutate: mutateInvites, error: inviteMutationError } = useMutation({
         mutationFn: async (state: "accepted" | "rejected") => {
@@ -213,7 +211,10 @@ const PendingInvite = ({ inviteAtUri }: { inviteAtUri: Required<AtUri> }) => {
                 },
             });
 
-            if(!creationResult.ok) throw new Error(`Error when submitting data. Check the inputs. ${creationResult.error}`)
+            if (!creationResult.ok)
+                throw new Error(
+                    `Error when submitting data. Check the inputs. ${creationResult.error}`,
+                );
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({
@@ -228,9 +229,12 @@ const PendingInvite = ({ inviteAtUri }: { inviteAtUri: Required<AtUri> }) => {
     return (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 2 }}>
             <Text>{inviteAtUri.rKey}</Text>
-            <Pressable style={{ marginLeft: 2 }} onPress={() => {
-                mutateInvites("accepted")
-            }}>
+            <Pressable
+                style={{ marginLeft: 2 }}
+                onPress={() => {
+                    mutateInvites("accepted");
+                }}
+            >
                 {({ hovered }) => (
                     <Check
                         height={16}
@@ -246,9 +250,12 @@ const PendingInvite = ({ inviteAtUri }: { inviteAtUri: Required<AtUri> }) => {
                     />
                 )}
             </Pressable>
-            <Pressable style={{ marginLeft: 2 }} onPress={() => {
-                mutateInvites("rejected")
-            }}>
+            <Pressable
+                style={{ marginLeft: 2 }}
+                onPress={() => {
+                    mutateInvites("rejected");
+                }}
+            >
                 {({ hovered }) => (
                     <X
                         height={16}
