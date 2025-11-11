@@ -116,7 +116,7 @@ export const inviteNewUser = async ({
     agent: Agent;
 }): Promise<Result<undefined, string>> => {
     const now = new Date();
-    const rkey = TID.create(now.getTime(), Math.random());
+    const rkey = TID.create(now.getTime() * 1_000, Math.random());
 
     const record: Omit<SystemsGmstnDevelopmentChannelInvite, "$type"> = {
         // @ts-expect-error we want to explicitly use the ISO string variant
