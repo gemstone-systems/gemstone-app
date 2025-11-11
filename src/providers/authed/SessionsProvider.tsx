@@ -6,7 +6,7 @@ import { connectToLattice, getLatticeEndpointFromDid } from "@/lib/utils/gmstn";
 import { useHandshakes } from "@/providers/authed/HandshakesProvider";
 import { useQueries } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type SessionsMap = Map<LatticeSessionInfo, WebSocket>;
 
@@ -46,6 +46,7 @@ export const SessionsProvider = ({ children }: { children: ReactNode }) => {
                 return await endpointQueryFn(handshake);
             },
             staleTime: DEFAULT_STALE_TIME,
+            retries: false,
         })),
     });
 
@@ -53,18 +54,31 @@ export const SessionsProvider = ({ children }: { children: ReactNode }) => {
         handshakesInitialising || endpointQueries.some((q) => q.isLoading);
     const error = endpointQueries.find((q) => q.error)?.error ?? null;
 
-    const sessionsMap = new Map<LatticeSessionInfo, WebSocket>();
+    const [sessionsMap] = useState<Map<LatticeSessionInfo, WebSocket>>(
+        new Map<LatticeSessionInfo, WebSocket>(),
+    );
+    console.log(sessionsMap);
 
-    endpointQueries.forEach((q) => {
-        const endpoint = q.data;
-        if (!endpoint) return;
-        const { sessionInfo, shardUrl } = endpoint;
-        const websocket = connectToLattice({
-            shardUrl,
-            sessionToken: sessionInfo.token,
+    useEffect(() => {
+        endpointQueries.forEach((q) => {
+            const endpoint = q.data;
+            if (!endpoint) return;
+            const { sessionInfo, shardUrl } = endpoint;
+            const existingWs = sessionsMap.get(sessionInfo);
+            if (existingWs) return;
+            console.log(
+                "Initiating lattice connection to",
+                shardUrl,
+                "with sessionToken",
+                sessionInfo.token,
+            );
+            const websocket = connectToLattice({
+                shardUrl,
+                sessionToken: sessionInfo.token,
+            });
+            sessionsMap.set(sessionInfo, websocket);
         });
-        sessionsMap.set(sessionInfo, websocket);
-    });
+    }, [sessionsMap, endpointQueries]);
 
     const value: SessionsContextValue = {
         sessionsMap,
