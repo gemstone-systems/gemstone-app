@@ -167,11 +167,6 @@ const PendingInvite = ({ inviteAtUri }: { inviteAtUri: Required<AtUri> }) => {
         useConstellationInvitesQuery(session);
     const queryClient = useQueryClient();
 
-    const queryKeysToInvalidate = constellationInvitesQueryKey.concat([
-        "membership",
-        session.did,
-    ]);
-
     const { mutate: mutateInvites, error: inviteMutationError } = useMutation({
         mutationFn: async (state: "accepted" | "rejected") => {
             const inviteCommitRes = await getCommitFromFullAtUri(inviteAtUri);
@@ -218,7 +213,10 @@ const PendingInvite = ({ inviteAtUri }: { inviteAtUri: Required<AtUri> }) => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: queryKeysToInvalidate,
+                queryKey: ["membership", session.did],
+            });
+            await queryClient.invalidateQueries({
+                queryKey: constellationInvitesQueryKey,
             });
         },
         onError: () => {
