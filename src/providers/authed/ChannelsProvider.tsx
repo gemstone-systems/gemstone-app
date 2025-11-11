@@ -67,7 +67,6 @@ export const ChannelsProvider = ({ children }: { children: ReactNode }) => {
     // TODO: move this to own query hook
     const channelsQueries = useQueries({
         queries: memberships.map((membershipObjects) => {
-
             return {
                 enabled: !membershipsInitialising,
                 queryKey: ["channel", membershipObjects.membership.channel.uri],
